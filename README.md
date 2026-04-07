@@ -380,10 +380,9 @@ For questions about this codebase, refer to:
 - This README
 - Code comments in each file
 - The structure documented above
- 
-**Remember**: You built this. You own this. You know it better than anyone.
- 
----
+- Or contact me :
+  - Discord : mtz.classix
+
  
 *Last updated: April 2026*
 *Author: Classix*
