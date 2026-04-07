@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PvP Tier System – Rankings and competitive play." />
+  <title>Skill Tiers | Competitive PvP Rankings</title>
+
+  <link rel="icon" type="image/png" href="../MAIN%20ICON/google%20icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="./CSS/style.css" />
+</head>
+
+<body>
+
+  <!-- ========== SITE HEADER ========== -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <!-- Logo: Stylized text matching MCTIERS gradient -->
+      <a href="#" class="logo">
+        <img src="../MAIN ICON/ST 512px.png" class="header-logo-img" alt="Logo">
+      </a>
+
+      <!-- Main Navigation -->
+      <nav class="main-nav">
+        <a href="#" class="nav-item">
+          <span class="nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 279.8 243.2" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M224 228.8H55.2c-11.9 0-21.5-9.6-21.5-21.5V94.8c0-7.1 3.5-13.7 9.3-17.7l88-60.3c7.6-5.2 17.6-5 24.9.5l80.8 59.8c5.5 4.1 8.7 10.5 8.7 17.3v113c0 11.9-9.6 21.5-21.5 21.5Z"
+                fill="none" stroke="currentColor" stroke-width="20.6" stroke-miterlimit="10" />
+              <path d="M81 179.2h118.2" fill="none" stroke="currentColor" stroke-width="20.6" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </span>
+          Home
+        </a>
+        <a href="#" class="nav-item active">
+          <span class="nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 279.82 243.16" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M157.43 152.45v21.27c0 1.82.63 3.58 1.79 4.99l27.86 33.85c4.22 5.12.57 12.84-6.06 12.84H98.19c-6.64 0-10.28-7.72-6.06-12.84l27.89-33.84a7.85 7.85 0 0 0 1.79-4.99v-21.27c0-3.03-1.74-5.78-4.47-7.08l-41.52-19.83a7.85 7.85 0 0 1-4.47-7.08V29.54c0-7.22 5.85-13.07 13.07-13.07h110.34c7.22 0 13.07 5.85 13.07 13.07v88.92c0 3.02-1.74 5.78-4.47 7.08l-41.48 19.82a7.85 7.85 0 0 0-4.47 7.08Z"
+                fill="none" stroke="currentColor" stroke-width="20.59" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M207.84 37.35h30.31c10.66 0 18.35 10.22 15.4 20.46L243.14 94a16.02 16.02 0 0 1-17.12 11.5l-18.18-1.95zM71.35 37.35H41.04c-10.66 0-18.35 10.22-15.4 20.46L36.05 94a16.02 16.02 0 0 0 17.12 11.5l18.18-1.95z"
+                fill="none" stroke="currentColor" stroke-width="20.59" />
+            </svg>
+          </span>
+          Rankings
+        </a>
+        <div class="nav-item discord-nav-item">
+          <span class="nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 279.82 243.16" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="m255.76 190.97-41.85 23.84c-9.91 5.65-22.52 2.38-28.44-7.36l-6.11-10.05a21.07 21.07 0 0 0-18.01-10.13h-42.51c-7.36 0-14.19 3.84-18.01 10.13l-6.11 10.05c-5.93 9.75-18.53 13.01-28.44 7.36l-41.83-23.83c-6.39-3.64-10.44-10.34-10.63-17.69-.24-8.9-.32-21.77.5-34.94 5.83-52.77 36.36-83.31 57.83-98.56 10.73-7.62 25.74-3.53 31.26 8.42a21.09 21.09 0 0 0 19.13 12.24h35.13c8.22 0 15.69-4.78 19.13-12.24 5.52-11.95 20.53-16.04 31.26-8.42 21.47 15.25 52 45.79 57.83 98.56.85 13.18.76 26.04.52 34.95-.21 7.34-4.25 14.03-10.63 17.67Z"
+                fill="none" stroke="currentColor" stroke-width="20.59" />
+              <circle cx="187.54" cy="135.51" r="10.18" fill="none" stroke="currentColor" stroke-width="20.59" />
+              <circle cx="92.39" cy="135.51" r="10.18" fill="none" stroke="currentColor" stroke-width="20.59" />
+            </svg>
+          </span>
+          Discords
+          <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24" style="margin-left: 4px"
+            class="dropdown-chevron">
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
+
+          <!-- Dropdown Menu -->
+          <div class="nav-dropdown">
+            <div class="dropdown-grid">
+              <!-- Vanilla -->
+              <a href="https://discord.com/invite/cpvp" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                <div class="item-icon vanilla-icon">
+                  <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M667.91 1000.52 549.18 558.88M536.97 546.67 91.62 424.23M549.18 546.67l329.67-333.38"
+                      stroke="#c0bdf7" stroke-width="112.67" stroke-miterlimit="10" fill="none" />
+                    <path
+                      d="m711.29 957.14 245.97-245.97c26.84-26.84 37.32-65.96 27.5-102.63l-90.03-336c-9.82-36.67-38.46-65.3-75.13-75.13l-336-90.03c-36.67-9.82-75.79.66-102.63 27.5L135 380.85c-26.84 26.84-37.32 65.96-27.5 102.63l90.03 336c9.82 36.67 38.46 65.3 75.13 75.13l336 90.03c36.66 9.83 75.79-.65 102.63-27.5z"
+                      stroke="#fff" stroke-width="112.67" stroke-miterlimit="10" fill="none" />
+                    <path
+                      d="M805.48 629.12v-171c0-39.75-21.21-76.48-55.63-96.35l-148.09-85.5c-34.42-19.87-76.84-19.87-111.26 0l-148.09 85.5c-34.42 19.87-55.63 56.6-55.63 96.35v171c0 39.75 21.21 76.48 55.63 96.35l148.09 85.5c34.42 19.87 76.84 19.87 111.26 0l148.09-85.5c34.42-19.87 55.63-56.6 55.63-96.35"
+                      fill="#c889e6" />
+                  </svg>
+                </div>
+                <span>Vanilla</span>
+              </a>
+
+              <!-- UHC -->
+              <a href="https://discord.com/invite/uhcpvp" target="_blank" rel="noopener noreferrer"
+                class="dropdown-item">
+                <div class="item-icon uhc-icon">
+                  <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M1002.44 383.44c0 198.43-152.88 402.34-462.4 544.33C230.52 785.78 77.56 581.87 77.56 383.44c0-127.68 103.52-231.2 231.27-231.2 103.73 0 161.98 58.25 231.2 163.85 69.15-105.6 127.4-163.85 231.2-163.85 127.69 0 231.21 103.51 231.21 231.2"
+                      fill="#d44e50" />
+                    <path
+                      d="M283.14 393.16c27.33 60.17 75.93 120.34 145.8 180.52M796.92 393.16q-40.98 90.255-145.8 180.51"
+                      stroke="#9d2323" stroke-width="114.69" stroke-linecap="round" stroke-linejoin="round"
+                      fill="none" />
+                  </svg>
+                </div>
+                <span>UHC</span>
+              </a>
+
+              <!-- Pot -->
+              <a href="https://discord.com/invite/potionpvp" target="_blank" rel="noopener noreferrer"
+                class="dropdown-item">
+                <div class="item-icon pot-icon">
+                  <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M867.63 644.62C859.91 818.87 716.16 957.78 540 957.78S220.09 818.87 212.37 644.62c115.01-29.67 230.55-35.42 327.63 0 94.58 34.51 206.02 52.74 327.63 0"
+                      fill="#d65474" />
+                    <path
+                      d="M574.61 285.31v65.6c0 35.19 21.51 66.8 54.24 79.72 22.23 8.77 43.04 20.81 61.84 35.78a244.1 244.1 0 0 1 48.62 51.94c28.11 40.56 42.97 88.21 42.97 137.81 0 64.71-25.2 125.55-70.97 171.32-45.76 45.76-106.61 70.97-171.32 70.97s-125.55-25.2-171.32-70.97c-45.76-45.76-70.97-106.61-70.97-171.32 0-49.59 14.86-97.25 42.97-137.81a243.9 243.9 0 0 1 48.62-51.94c18.8-14.97 39.61-27 61.84-35.78 32.73-12.92 54.24-44.53 54.24-79.72v-65.6zm85.71-85.7H419.68v151.3c-121.6 48-207.67 166.57-207.67 305.24 0 181.14 146.85 327.99 327.99 327.99s327.99-146.85 327.99-327.99c0-138.68-86.07-257.25-207.67-305.24z"
+                      fill="#fff" />
+                    <path
+                      d="M655.37 77.64H418.03c-40.96 0-74.17 33.21-74.17 74.17s33.21 74.17 74.17 74.17h237.34c40.96 0 74.17-33.21 74.17-74.17s-33.2-74.17-74.17-74.17"
+                      fill="#fff" />
+                  </svg>
+                </div>
+                <span>Pot</span>
+              </a>
+
+              <!-- NethOP -->
+              <a href="https://discord.com/invite/nethop" target="_blank" rel="noopener noreferrer"
+                class="dropdown-item">
+                <div class="item-icon nethop-icon">
+                  <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M318.76 910.04c139.39-61.23 285.97-65.01 441.16 0L937.7 790.79l-50.48-441.68H198.05L132.2 705.19z"
+                      style="fill:#6e4a91" />
+                    <path
+                      d="M784.75 950.72c-78.35 0-111.04 18.34-111.04-60.01s32.69-141.89 111.04-141.89v-.05c96.04-1.19 109.77-77.59 108.2-180.26-.7-47.21-30.55-88.28-72.44-103.75-11.5-4.29-23.93-6.62-36.9-6.62-125.4 0-159.15 34.56-159.15 101.03 0 96.48-42.05 121.98-75.26 121.98h-18.45c-33.15 0-75.21-26.97-75.21-121.98 0-58.28-25.94-92.03-116.72-99.46-12.8-1.03-26.91-1.57-42.43-1.57-60.17 0-108.41 50.19-109.34 110.37-.71 45.47 1.63 85.79 12.75 116.66 14 38.91 41.94 62.94 95.44 63.59v.05c78.35 0 86.11 63.54 86.11 141.89s-7.76 60.01-86.11 60.01c-104.29 0-159.74-46.18-189.21-113.46-36.41-82.91-33.26-197.84-33.26-298 0-330.56 210.48-411.84 467.24-411.84h3.74c174.23.49 315.8 34.46 394.81 145.85 44.06 62.07 68.64 148.19 68.64 265.99.02 181.46 10.22 411.47-222.45 411.47"
+                      fill="#8f72a5" />
+                  </svg>
+                </div>
+                <span>NethOP</span>
+              </a>
+
+              <!-- SMP -->
+              <a href="https://discord.com/invite/smptiers" target="_blank" rel="noopener noreferrer"
+                class="dropdown-item">
+                <div class="item-icon smp-icon">
+                  <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <radialGradient id="smp-a" cx="455.166" cy="742.126" r="254.582"
+                        gradientTransform="matrix(.4023 -.07297 -.07297 .4023 195.29 58.14)"
+                        gradientUnits="userSpaceOnUse">
+                        <stop offset="0" style="stop-color:#010202" />
+                        <stop offset=".863" style="stop-color:#000;stop-opacity:0" />
+                      </radialGradient>
+                      <radialGradient id="smp-b" cx="15.845" cy="293.96" r="254.68"
+                        gradientTransform="matrix(.4023 -.07297 -.07297 .4023 195.29 58.14)"
+                        gradientUnits="userSpaceOnUse">
+                        <stop offset="0" style="stop-color:#010202" />
+                        <stop offset=".863" style="stop-color:#000;stop-opacity:0" />
+                      </radialGradient>
+                      <radialGradient id="smp-c" cx="-71.414" cy="-104.478" r="254.629"
+                        gradientTransform="matrix(-.03216 -.4597 .442 .1304 293.667 234.617)"
+                        gradientUnits="userSpaceOnUse">
+                        <stop offset="0" style="stop-color:#010202" />
+                        <stop offset=".863" style="stop-color:#000;stop-opacity:0" />
+                      </radialGradient>
+                      <radialGradient id="smp-d" cx="173.555" cy="9.686" r="254.649"
+                        gradientTransform="matrix(.07925 -.8725 .8691 .1104 227.653 415.014)"
+                        gradientUnits="userSpaceOnUse">
+                        <stop offset="0" style="stop-color:#010202" />
+                        <stop offset=".863" style="stop-color:#000;stop-opacity:0" />
+                      </radialGradient>
+                      <radialGradient id="smp-e" cx="158.943" cy="-37.444" r="143.067"
+                        gradientTransform="rotate(-45 358.127 76.959)scale(1 .8613)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".621" style="stop-color:#40bc9e" />
+                        <stop offset=".94" style="stop-color:#12574b" />
+                      </radialGradient>
+                      <radialGradient id="smp-f" cx="550.076" cy="-133.448" r="143.067"
+                        gradientTransform="rotate(135 359.132 90.706)scale(1 .8613)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".621" style="stop-color:#40bc9e" />
+                        <stop offset=".94" style="stop-color:#12574b" />
+                      </radialGradient>
+                      <radialGradient id="smp-g" cx="158.782" cy="-58.122" r="83.415"
+                        gradientTransform="rotate(-45 371.381 71.469)scale(1 .6536)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".286" style="stop-color:#fff" />
+                        <stop offset=".691" style="stop-color:#40bc9e" />
+                      </radialGradient>
+                      <radialGradient id="smp-h" cx="227.858" cy="-185.011" r="83.415"
+                        gradientTransform="rotate(135 195.956 152.222)scale(1 .6536)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".286" style="stop-color:#fff" />
+                        <stop offset=".691" style="stop-color:#40bc9e" />
+                      </radialGradient>
+                    </defs>
+                    <circle cx="256.6" cy="257.7" r="215.4" style="fill:#10574b" />
+                    <path
+                      d="M426.6 305c-10.2 56.5-64.4 110.7-120.9 120.9s-94.1-27.3-83.9-83.9 64.5-110.7 121-121c56.7-10.2 94.2 27.4 83.8 84"
+                      fill="url(#smp-a)" />
+                    <path
+                      d="M282.7 156.7c-10.3 56.5-64.5 110.7-121 121s-94.2-27.3-83.9-83.9 64.5-110.7 121.1-121 94.1 27.2 83.8 83.9"
+                      fill="url(#smp-b)" />
+                    <path
+                      d="M241.6 136.8c62.2 18.4 116.2 85.6 120.8 150.3S320.1 389.3 258 370.9s-116.3-85.5-120.8-150.3c-4.4-64.7 42.2-102.1 104.4-83.8"
+                      fill="url(#smp-c)" />
+                    <path
+                      d="M270 42.5C392.3 58 482.3 170.1 471.1 292.8s-119.2 209.5-241.5 194C107.4 471.4 17.3 359.3 28.5 236.5S147.8 27 270 42.5"
+                      fill="url(#smp-d)" />
+                    <path
+                      d="M83.6 262.2c15.8 15.8 46.8-46.8 89.3-89.3s104.7-72 88.3-88.3c-10.7-10.7-74.2-16-133.9 43.7C73.4 182.1 68.4 247 83.6 262.2"
+                      fill="url(#smp-e)" />
+                    <path
+                      d="M426 249.6c-15.8-15.8-46.8 46.8-89.3 89.3s-104.6 71.9-88.3 88.3c10.7 10.7 74.2 16 133.9-43.7 53.9-53.9 58.9-118.7 43.7-133.9"
+                      fill="url(#smp-f)" />
+                    <path
+                      d="M106.1 210.8c7 7 27.3-27.3 52.2-52.2s58.7-44.2 51.5-51.5c-16.3-16.3-55.3 15.4-71.8 31.9-16.4 16.5-47.6 56-31.9 71.8"
+                      fill="url(#smp-g)" />
+                    <path
+                      d="M404.1 301.6c-7-7-27.3 27.3-52.2 52.2s-58.7 44.2-51.5 51.5c16.3 16.3 55.3-15.4 71.8-31.9s47.7-56 31.9-71.8"
+                      fill="url(#smp-h)" />
+                  </svg>
+                </div>
+                <span>SMP</span>
+              </a>
+
+              <!-- Sword -->
+              <a href="https://discord.com/invite/swordtiers" target="_blank" rel="noopener noreferrer"
+                class="dropdown-item">
+                <div class="item-icon sword-icon">
+                  <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M901.02 120.67 722.8 198.83a61.6 61.6 0 0 0-18.81 12.85L358.24 557.43 547.71 746.9l345.41-345.41a61.6 61.6 0 0 0 13.21-19.64l76.18-180.86c21.62-51.31-30.51-102.68-81.49-80.32"
+                      fill="#71bfdd" />
+                    <path
+                      d="m607.14 832.65-56.51 56.47c-8.89 8.89-23.31 8.88-32.2-.01l-88.72-88.72c-8.89-8.89-23.32-8.89-32.21 0l-80.66 80.71c-8.89 8.89-8.89 23.31 0 32.2s8.89 23.31 0 32.2l-64.52 64.52c-8.89 8.89-23.31 8.89-32.2 0L99.14 889.04c-8.89-8.89-8.89-23.31 0-32.2l64.52-64.52c8.89-8.89 23.31-8.89 32.2 0l.06.06c8.89 8.89 23.32 8.89 32.21 0l80.66-80.71c8.89-8.89 8.89-23.31 0-32.2l-88.72-88.72c-8.9-8.9-8.89-23.32.01-32.21l56.51-56.47c8.89-8.89 23.31-8.88 32.2.01l298.37 298.37c8.88 8.88 8.88 23.3-.02 32.2"
+                      fill="#6195d9" />
+                  </svg>
+                </div>
+                <span>Sword</span>
+              </a>
+
+              <!-- Axe -->
+              <a href="https://discord.com/invite/axepvp" target="_blank" rel="noopener noreferrer"
+                class="dropdown-item">
+                <div class="item-icon axe-icon">
+                  <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M89.46 873.94c-28.21-28.21-28.21-73.95 0-102.16l499.03-499.03 102.16 102.16-499.03 499.03c-28.21 28.21-73.95 28.21-102.16 0"
+                      fill="#6195d9" />
+                    <path
+                      d="m597.64 478.85 91.26 104.78c34.95 40.12 96.57 42.25 134.19 4.62l157.16-157.16c41.16-41.16 34.14-109.73-14.5-141.69l-118.3-77.74c-36.39-23.92-84.58-18.98-115.38 11.81L601.95 353.59c-34.13 34.13-36.02 88.86-4.31 125.26"
+                      fill="#71bfdd" />
+                    <path
+                      d="m542.1 336.38 147.79 147.79c22.12 22.12 57.99 22.12 80.11 0l69.2-69.2c22.12-22.12 22.12-57.99 0-80.11L691.41 187.07c-22.12-22.12-57.99-22.12-80.11 0l-69.2 69.2c-22.12 22.13-22.12 57.99 0 80.11"
+                      fill="#71bfdd" />
+                  </svg>
+                </div>
+                <span>Axe</span>
+              </a>
+
+              <!-- Mace -->
+              <a href="https://discord.com/invite/mctiers" target="_blank" rel="noopener noreferrer"
+                class="dropdown-item">
+                <div class="item-icon mace-icon">
+                  <svg viewBox="0 0 750 750" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#60606b"
+                      d="M574.5 131.5a50 50 0 0 1 2.5 7 373 373 0 0 1 15.5 17q-.69 7.764-4.5 15a820 820 0 0 1-42.5 41 108 108 0 0 0-8 9.5 23 23 0 0 1-5 2l-56 56a7463 7463 0 0 0-14 12l-61 61q-3.822 3.663-9 5-8.923.306-17.5-2.5l-1.5.5q1.129 1.006 1 2.5-10.083-13.843-23-25.5a28 28 0 0 1-4-1.5 9331 9331 0 0 0-83-101q-5.832-15.26 7-25.5a20587 20587 0 0 1 179-166q9-5 18 0a11266 11266 0 0 0 106 93.5"
+                      style="opacity:.988" />
+                    <path fill="#5b5b6d"
+                      d="M618.5 176.5a147 147 0 0 1-8-2.5 157.7 157.7 0 0 0-18-18.5 373 373 0 0 0-15.5-17 50 50 0 0 0-2.5-7q-.25-30.005.5-60 2.913-9.414 12.5-11.5a2209 2209 0 0 1 94 0q7.75 1.75 9.5 9.5l.5 47q.207 25.575-1.5 51-3.333 5.832-9.5 8.5-30.996.75-62 .5"
+                      style="opacity:.973" />
+                    <path fill="#444451"
+                      d="M459.5 109.5q13.206-.54 15 12.5a495 495 0 0 1-6.5 33.5 409.5 409.5 0 0 1-10.5 61 103 103 0 0 0-7 6.5 1746 1746 0 0 0-98 20q-9.29 2.567-15.5-4.5a25.2 25.2 0 0 1 0-10q6.556-9.711 16.5-16.5a15647 15647 0 0 0 106-102.5"
+                      style="opacity:1" />
+                    <path fill="#4d4d5c"
+                      d="M592.5 155.5a157.7 157.7 0 0 1 18 18.5q4.126 1.414 8 2.5 30.047 33.787 65.5 64a796 796 0 0 1 32 35q7.39 10.42-1 20A20370 20370 0 0 1 548.5 467a59.5 59.5 0 0 1-13.5 4.5 38.5 38.5 0 0 1-14.5-5.5 454 454 0 0 1-41-28 2997 2997 0 0 0-58-39.5q-1.977-5.748-7-9.5a259 259 0 0 1-40-31.5q.129-1.494-1-2.5l1.5-.5q8.577 2.806 17.5 2.5 5.178-1.337 9-5l61-61a7463 7463 0 0 1 14-12l56-56a23 23 0 0 0 5-2 108 108 0 0 1 8-9.5 820 820 0 0 0 42.5-41q3.81-7.236 4.5-15"
+                      style="opacity:.993" />
+                    <path fill="#444451"
+                      d="M632.5 274.5q13.521-3.004 17 10a41.8 41.8 0 0 1-3.5 8Q588.33 348.168 530.5 404q-14.645 8.784-18-8 6.668-41.755 13.5-83.5-.579-16.673 15.5-19.5a3134 3134 0 0 0 91-18.5"
+                      style="opacity:1" />
+                    <path fill="#9191b7"
+                      d="M347.5 330.5q1.899.885 4 1.5 12.917 11.657 23 25.5a259 259 0 0 0 40 31.5q5.023 3.752 7 9.5a2385 2385 0 0 1-59 57q-5.56 2.784-10 7.5.834.574 1 1.5-5 6-11 11-1.22-1.73-3 0-1.393 1.783-1 4l-6 5h-3v3a148891 148891 0 0 1-37 36q-.595-1.538-2-.5-6.405 5.642-11 12.5a55 55 0 0 1-7 7q.197-1.314-1-2a32.5 32.5 0 0 1-5 4.5l1 1a4.93 4.93 0 0 1-3 .5v4q-6.961 6.458-14 13a127 127 0 0 0-11 8.5q.834.575 1 1.5-8.5 7.5-16 16a2.43 2.43 0 0 0-2 .5q-1.857 1.035 0 1.5a335 335 0 0 0-27.5 26 939 939 0 0 0-2 59q-5.44 13.435-19.5 17.5-52.545.678-105-2-9.639-5.032-12.5-15.5-1-33 0-66 .11-20.582 2-41 4.788-8.787 13.5-13.5a778 778 0 0 1 52-2 3432 3432 0 0 0 98.5-98.5 7390 7390 0 0 0 125.5-125"
+                      style="opacity:.961" />
+                  </svg>
+                </div>
+                <span>Mace</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <a href="https://mctiers.com/docs/v2#tag/gamemode" target="_blank" rel="noopener noreferrer" class="nav-item">
+          <span class="nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg">
+              <path fill="currentColor"
+                d="M64 48h112v88c0 39.8 32.2 72 72 72h88v240c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16m160 19.9 92.1 92.1H248c-13.3 0-24-10.7-24-24zM64 0C28.7 0 0 28.7 0 64v384c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64V186.5c0-17-6.7-33.3-18.7-45.3L242.7 18.7C230.7 6.7 214.5 0 197.5 0zm106.2 295.6c8.6-10.1 7.5-25.2-2.6-33.8s-25.2-7.5-33.8 2.6l-48 56c-7.7 9-7.7 22.2 0 31.2l48 56c8.6 10.1 23.8 11.2 33.8 2.6s11.2-23.8 2.6-33.8L135.6 336zm80-31.2c-8.6-10.1-23.8-11.2-33.8-2.6s-11.2 23.8-2.6 33.8l34.6 40.4-34.6 40.4c-8.6 10.1-7.5 25.2 2.6 33.8s25.2 7.5 33.8-2.6l48-56c7.7-9 7.7-22.2 0-31.2z" />
+            </svg>
+          </span>
+          API Docs
+        </a>
+
+        <!-- Search -->
+        <div class="search-wrapper">
+          <svg class="search-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.6" />
+            <path d="M13 13l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+          <input id="search-input" type="text" class="search-input" placeholder="Search player..." autocomplete="off"
+            spellcheck="false" />
+          <span class="search-shortcut">/</span>
+          <button id="search-clear" class="search-clear" hidden>✕</button>
+        </div>
+    </div>
+  </header>
+
+  <main class="main container">
+    <!-- Tabs Container -->
+    <nav class="tabs-nav" id="tabs-nav">
+      <!-- Generated by JS -->
+    </nav>
+
+    <div class="content-wrapper">
+      <div class="content-header">
+        <button class="info-btn" id="info-btn">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" style="margin-right: 4px">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+          </svg>
+          Information
+        </button>
+        <div class="server-banner">
+          <div class="server-logo">
+            <img src="../MAIN ICON/pvpclub.webp" class="server-logo-img" alt="PvP Club">
+          </div>
+          <div class="server-ip">
+            <div class="server-title">SERVER IP</div>
+            <div class="server-address">mcpvp.club</div>
+          </div>
+          <a href="#" id="discord-link" class="server-discord" title="Join Discord">
+            <img src="../main tab SVG/discord.svg" class="discord-icon-img" alt="Discord" id="discord-icon">
+          </a>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div id="error-msg" class="error-msg" hidden>
+        <span id="error-text"></span>
+        <button id="retry-btn" class="retry-btn">Retry</button>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div id="loading-spinner" class="loading-spinner">
+        <div class="spinner-ring"></div>
+      </div>
+
+      <!-- Leaderboard View -->
+      <div id="view-container">
+        <!-- Render.js handles injecting table headers and layout format based on active mode -->
+      </div>
+
+      <!-- Load More / Footer (Optional pagination depending on column handling) -->
+      <div id="load-more-wrapper" class="load-more-wrapper" hidden>
+        <button id="load-more-btn" class="load-more-btn">Load More</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Information Modal Overlay -->
+  <div id="info-modal-overlay" class="modal-overlay" hidden>
+    <div class="info-modal">
+      <div class="modal-nav">
+        <button class="modal-tab-btn active" data-tab="titles">Titles</button>
+        <button class="modal-tab-btn" data-tab="points">Points</button>
+        <button class="modal-tab-btn" data-tab="tier-test">Tier Test</button>
+        <button class="modal-tab-btn" data-tab="testing-kit">Testing Kit</button>
+      </div>
+
+      <div id="modal-content-area" class="modal-content">
+        <!-- Titles Tab -->
+        <div class="tab-pane active" id="pane-titles">
+          <h3>How to obtain <span class="underlined">Achievement Titles</span></h3>
+          <div class="titles-list">
+            <div class="title-item">
+              <img src="../info icon/combat_grandmaster.webp" alt="Grandmaster" />
+              <div class="title-text">
+                <h4 style="color:#fbbf24">Combat Grandmaster</h4>
+                <p>Obtained 400+ total points.</p>
+              </div>
+            </div>
+            <div class="title-item">
+              <img src="../info icon/combat_master.webp" alt="Master" />
+              <div class="title-text">
+                <h4 style="color:#fcd34d">Combat Master</h4>
+                <p>Obtained 250+ total points.</p>
+              </div>
+            </div>
+            <div class="title-item">
+              <img src="../info icon/combat_ace.webp" alt="Ace" />
+              <div class="title-text">
+                <h4 style="color:#f87171">Combat Ace</h4>
+                <p>Obtained 100+ total points.</p>
+              </div>
+            </div>
+            <div class="title-item">
+              <img src="../info icon/combat_specialist.svg" alt="Specialist" />
+              <div class="title-text">
+                <h4 style="color:#c084fc">Combat Specialist</h4>
+                <p>Obtained 50+ total points.</p>
+              </div>
+            </div>
+            <div class="title-item">
+              <img src="../info icon/combat_cadet.svg" alt="Cadet" />
+              <div class="title-text">
+                <h4 style="color:#818cf8">Combat Cadet</h4>
+                <p>Obtained 20+ total points.</p>
+              </div>
+            </div>
+            <div class="title-item">
+              <img src="../info icon/combat_novice.svg" alt="Novice" />
+              <div class="title-text">
+                <h4 style="color:#93c5fd">Combat Novice</h4>
+                <p>Obtained 10+ total points.</p>
+              </div>
+            </div>
+            <div class="title-item">
+              <img src="../info icon/rookie.svg" alt="Rookie" />
+              <div class="title-text">
+                <h4 style="color:#9ca3af">Rookie</h4>
+                <p>Starting rank for players with less than 10 points.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Points Tab -->
+        <div class="tab-pane" id="pane-points" hidden>
+          <h3>How <span class="underlined">ranking points</span> are calculated</h3>
+          <div class="points-grid">
+            <div class="points-tier-group">
+              <div class="points-header">
+                <svg class="tier-header-icon" style="width:16px;height:16px;" viewBox="0 0 1080 1080">
+                  <path
+                    d="M859.2 273.1v63.7c0 178.7-143.7 421.8-322.1 425.6-1.6.3-2.9.3-4.5.3-180.3 0-326.5-245.6-326.5-425.9v-132c0-90.2 73.3-95.1 163.4-95.1h326.2c90.2 0 163.4 73.3 163.4 163.4Z"
+                    fill="#ffaf00" />
+                  <path d="M532.6 376.5v445.9" style="fill:none" />
+                  <path
+                    d="M621.2 376.7v445.7c0 47.5-37.3 86-84.1 88.6h-4.5c-49.1 0-88.6-39.5-88.6-88.6V376.7c0-49.1 39.5-88.9 88.6-88.9s88.6 39.8 88.6 88.9"
+                    fill="#ffaf00" />
+                  <path
+                    d="M735.5 929.4c0 26.8-21.7 48.7-48.4 48.7h-309c-26.8 0-48.4-22-48.4-48.7s12.1-56.1 31.2-75.5c19.4-19.4 46.2-31.5 75.8-31.5h191.8c59.2 0 107 48.1 107 107"
+                    fill="#ffaf00" />
+                  <path d="M818.2 230.5s176.3-42.8 176.3 95.2-77 427-302.6 345.7"
+                    style="fill:none;stroke-linecap:round;stroke-miterlimit:10;stroke-width:96.4px;stroke:#ffa100" />
+                  <path d="M255.7 230.5S79.4 187.7 79.4 325.7s77 427 302.6 345.7"
+                    style="fill:none;stroke:#ffaf00;stroke-linecap:round;stroke-miterlimit:10;stroke-width:96.4px" />
+                  <path
+                    d="M621.2 742.7v79.6h7.3c59.2 0 107 48.1 107 107S713.8 978 687.1 978h-150V109.7h158.6c90.2 0 163.4 5 163.4 95.1v132c0 149.4-100.7 344-238 405.8Z"
+                    fill="#ffa100" />
+                </svg>
+                Tier 1
+              </div>
+              <div class="points-rows">
+                <div class="points-pill pill-ht1"><span>HT1</span> 60 Points</div>
+                <div class="points-pill pill-lt1"><span>LT1</span> 45 Points</div>
+              </div>
+            </div>
+            <div class="points-tier-group">
+              <div class="points-header">
+                <svg class="tier-header-icon" style="width:16px;height:16px;" viewBox="0 0 1080 1080">
+                  <path
+                    d="M859.2 273.1v63.7c0 178.7-143.7 421.8-322.1 425.6-1.6.3-2.9.3-4.5.3-180.3 0-326.5-245.6-326.5-425.9v-132c0-90.2 73.3-95.1 163.4-95.1h326.2c90.2 0 163.4 73.3 163.4 163.4Z"
+                    fill="#b4bdc7" />
+                  <path d="M532.6 376.5v445.9" style="fill:none" />
+                  <path
+                    d="M621.2 376.7v445.7c0 47.5-37.3 86-84.1 88.6h-4.5c-49.1 0-88.6-39.5-88.6-88.6V376.7c0-49.1 39.5-88.9 88.6-88.9s88.6 39.8 88.6 88.9"
+                    fill="#b4bdc7" />
+                  <path
+                    d="M735.5 929.4c0 26.8-21.7 48.7-48.4 48.7h-309c-26.8 0-48.4-22-48.4-48.7s12.1-56.1 31.2-75.5c19.4-19.4 46.2-31.5 75.8-31.5h191.8c59.2 0 107 48.1 107 107"
+                    fill="#b4bdc7" />
+                  <path d="M818.2 230.5s176.3-42.8 176.3 95.2-77 427-302.6 345.7"
+                    style="fill:none;stroke-linecap:round;stroke-miterlimit:10;stroke-width:96.4px;stroke:#a0acba" />
+                  <path d="M255.7 230.5S79.4 187.7 79.4 325.7s77 427 302.6 345.7"
+                    style="fill:none;stroke:#b4bdc7;stroke-linecap:round;stroke-miterlimit:10;stroke-width:96.4px" />
+                  <path
+                    d="M621.2 742.7v79.6h7.3c59.2 0 107 48.1 107 107S713.8 978 687.1 978h-150V109.7h158.6c90.2 0 163.4 5 163.4 95.1v132c0 149.4-100.7 344-238 405.8Z"
+                    fill="#a0acba" />
+                </svg>
+                Tier 2
+              </div>
+              <div class="points-rows">
+                <div class="points-pill pill-ht2"><span>HT2</span> 30 Points</div>
+                <div class="points-pill pill-lt2"><span>LT2</span> 20 Points</div>
+              </div>
+            </div>
+            <div class="points-tier-group">
+              <div class="points-header">
+                <svg class="tier-header-icon" style="width:16px;height:16px;" viewBox="0 0 1080 1080">
+                  <path
+                    d="M859.2 273.1v63.7c0 178.7-143.7 421.8-322.1 425.6-1.6.3-2.9.3-4.5.3-180.3 0-326.5-245.6-326.5-425.9v-132c0-90.2 73.3-95.1 163.4-95.1h326.2c90.2 0 163.4 73.3 163.4 163.4Z"
+                    fill="#b56328" />
+                  <path d="M532.6 376.5v445.9" style="fill:none" />
+                  <path
+                    d="M621.2 376.7v445.7c0 47.5-37.3 86-84.1 88.6h-4.5c-49.1 0-88.6-39.5-88.6-88.6V376.7c0-49.1 39.5-88.9 88.6-88.9s88.6 39.8 88.6 88.9"
+                    fill="#b56328" />
+                  <path
+                    d="M735.5 929.4c0 26.8-21.7 48.7-48.4 48.7h-309c-26.8 0-48.4-22-48.4-48.7s12.1-56.1 31.2-75.5c19.4-19.4 46.2-31.5 75.8-31.5h191.8c59.2 0 107 48.1 107 107"
+                    fill="#b56328" />
+                  <path d="M818.2 230.5s176.3-42.8 176.3 95.2-77 427-302.6 345.7"
+                    style="stroke:#a15c2a;fill:none;stroke-linecap:round;stroke-miterlimit:10;stroke-width:96.4px" />
+                  <path d="M255.7 230.5S79.4 187.7 79.4 325.7s77 427 302.6 345.7"
+                    style="fill:none;stroke-linecap:round;stroke-miterlimit:10;stroke-width:96.4px;stroke:#b56328" />
+                  <path
+                    d="M621.2 742.7v79.6h7.3c59.2 0 107 48.1 107 107S713.8 978 687.1 978h-150V109.7h158.6c90.2 0 163.4 5 163.4 95.1v132c0 149.4-100.7 344-238 405.8Z"
+                    fill="#a15c2a" />
+                </svg>
+                Tier 3
+              </div>
+              <div class="points-rows">
+                <div class="points-pill pill-ht3"><span>HT3</span> 10 Points</div>
+                <div class="points-pill pill-lt3"><span>LT3</span> 6 Points</div>
+              </div>
+            </div>
+            <div class="points-tier-group">
+              <div class="points-header">Tier 4</div>
+              <div class="points-rows">
+                <div class="points-pill pill-ht4"><span>HT4</span> 4 Points</div>
+                <div class="points-pill pill-lt4"><span>LT4</span> 3 Points</div>
+              </div>
+            </div>
+            <div class="points-tier-group">
+              <div class="points-header">Tier 5</div>
+              <div class="points-rows">
+                <div class="points-pill pill-ht5"><span>HT5</span> 2 Points</div>
+                <div class="points-pill pill-lt5"><span>LT5</span> 1 Point</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tier Test Tab -->
+        <div class="tab-pane" id="pane-tier-test" hidden>
+          <h3>Tier Testing Process</h3>
+          <div class="test-process-description">
+            <p>To begin your tier assessment, join our official Discord server and navigate to the <span
+                class="channel-tag">#request-test</span> channel.</p>
+            <p>Complete the account verification process to confirm your identity, then fill out the tier assessment
+              form. Upon submission, you will be assigned to the appropriate waitlist.</p>
+            <p>Once tier testers are available in your region, you will be able to join the testing queue.</p>
+            <p>When you reach the top of the queue, you will receive access to a private channel to coordinate your
+              assessment with an assigned tier tester.</p>
+            <p class="final-wish">Best of luck in your assessment!</p>
+          </div>
+        </div>
+
+        <!-- Testing Kit Tab -->
+        <div class="tab-pane" id="pane-testing-kit" hidden>
+          <div class="testing-kit-content">
+            <img src="../kit.png" alt="Testing Kit" class="testing-kit-image">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Player Profile Modal Overlay -->
+  <div id="player-profile-overlay" class="modal-overlay player-profile-overlay">
+    <!-- Modal content is injected via JS into this container -->
+    <div id="player-profile-modal-root"></div>
+  </div>
+
+  <script type="module" src="./js/icons.js"></script>
+  <script type="module" src="./js/api.js"></script>
+  <script type="module" src="./js/render.js"></script>
+  <script type="module" src="./js/app.js"></script>
+
+</body>
+
+</html>
