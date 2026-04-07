@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MCTiers Data Fetcher</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a2e; color: #fff; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: #4a90d9; color: white; border: none; border-radius: 4px; }
+        button:hover { background: #357abd; }
+        #output { margin-top: 20px; white-space: pre-wrap; background: #16213e; padding: 15px; border-radius: 8px; max-height: 500px; overflow: auto; }
+        .error { color: #ff6b6b; }
+        .success { color: #4ecdc4; }
+    </style>
+</head>
+<body>
+    <h1>MCTiers Player Data Fetcher</h1>
+    <p>Click the button below to fetch player data from the MCTiers API and generate players.js</p>
+    <button onclick="fetchData()">Fetch Players</button>
+    <div id="output"></div>
+
+    <script>
+        const gamemodes = ['overall', 'ltm', 'vanilla', 'uhc', 'pot', 'nethop', 'smp', 'sword', 'axe', 'mace'];
+
+        function formatTier(tier) {
+            if (!tier) return null;
+            const match = tier.toString().match(/(high|low)_tier_(\d+)/i);
+            if (match) {
+                const prefix = match[1].toLowerCase() === 'high' ? 'HT' : 'LT';
+                return `${prefix}${match[2]}`;
+            }
+            if (/^[HL]T\d$/.test(tier)) return tier;
+            return tier;
+        }
+
+        function convertTier(tierData) {
+            if (!tierData) return { current: null, peak: null, retired: null };
+            if (typeof tierData === 'string') {
+                const formatted = formatTier(tierData);
+                return { current: formatted, peak: formatted, retired: null };
+            }
+            return {
+                current: formatTier(tierData.current || tierData.tier || null),
+                peak: formatTier(tierData.peak || tierData.best || tierData.current || tierData.tier || null),
+                retired: formatTier(tierData.retired || null)
+            };
+        }
+
+        function formatValue(value) {
+            return value === null ? 'null' : `"${value}"`;
+        }
+
+        async function fetchData() {
+            const output = document.getElementById('output');
+            output.textContent = 'Fetching data from MCTiers API...\n';
+
+            try {
+                const response = await fetch('https://mctiers.com/api/v2/overall?limit=500');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const apiPlayers = await response.json();
+                output.textContent += `✓ Fetched ${apiPlayers.length} players\n\nGenerating players.js...\n`;
+
+                const players = apiPlayers.map((player, index) => {
+                    const rank = index + 1;
+                    const tiers = {};
+                    gamemodes.forEach(mode => {
+                        const apiTier = player[mode] || (player.tiers && player.tiers[mode]);
+                        tiers[mode] = convertTier(apiTier);
+                    });
+
+                    return {
+                        username: player.name || player.username,
+                        uuid: "",
+                        points: player.points || 0,
+                        rank: rank,
+                        region: player.region || "NA",
+                        tiers: tiers
+                    };
+                });
+
+                let fileContent = `/**\n * Complete player data with all gamemode tiers\n * Each tier includes: current, peak, and retired (if applicable)\n */\n\nexport const players = [\n`;
+
+                players.forEach((p, i) => {
+                    const isLast = i === players.length - 1;
+                    fileContent += `  {\n    username: "${p.username}",\n    uuid: "${p.uuid}",\n    points: ${p.points},\n    rank: ${p.rank},\n    region: "${p.region}",\n    tiers: {\n      overall: { current: ${formatValue(p.tiers.overall.current)}, peak: ${formatValue(p.tiers.overall.peak)}, retired: ${formatValue(p.tiers.overall.retired)} },\n      ltm: { current: ${formatValue(p.tiers.ltm.current)}, peak: ${formatValue(p.tiers.ltm.peak)}, retired: ${formatValue(p.tiers.ltm.retired)} },\n      vanilla: { current: ${formatValue(p.tiers.vanilla.current)}, peak: ${formatValue(p.tiers.vanilla.peak)}, retired: ${formatValue(p.tiers.vanilla.retired)} },\n      uhc: { current: ${formatValue(p.tiers.uhc.current)}, peak: ${formatValue(p.tiers.uhc.peak)}, retired: ${formatValue(p.tiers.uhc.retired)} },\n      pot: { current: ${formatValue(p.tiers.pot.current)}, peak: ${formatValue(p.tiers.pot.peak)}, retired: ${formatValue(p.tiers.pot.retired)} },\n      nethop: { current: ${formatValue(p.tiers.nethop.current)}, peak: ${formatValue(p.tiers.nethop.peak)}, retired: ${formatValue(p.tiers.nethop.retired)} },\n      smp: { current: ${formatValue(p.tiers.smp.current)}, peak: ${formatValue(p.tiers.smp.peak)}, retired: ${formatValue(p.tiers.smp.retired)} },\n      sword: { current: ${formatValue(p.tiers.sword.current)}, peak: ${formatValue(p.tiers.sword.peak)}, retired: ${formatValue(p.tiers.sword.retired)} },\n      axe: { current: ${formatValue(p.tiers.axe.current)}, peak: ${formatValue(p.tiers.axe.peak)}, retired: ${formatValue(p.tiers.axe.retired)} },\n      mace: { current: ${formatValue(p.tiers.mace.current)}, peak: ${formatValue(p.tiers.mace.peak)}, retired: ${formatValue(p.tiers.mace.retired)} }\n    }\n  }${isLast ? '' : ','}\n`;
+                });
+
+                fileContent += '];\n';
+
+                // Create download link
+                const blob = new Blob([fileContent], { type: 'application/javascript' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'players.js';
+                a.textContent = 'Download players.js';
+                a.style.cssText = 'display: inline-block; margin-top: 20px; padding: 10px 20px; background: #4ecdc4; color: #1a1a2e; text-decoration: none; border-radius: 4px; font-weight: bold;';
+                
+                output.innerHTML = `<span class="success">✓ Successfully generated players.js with ${players.length} players!</span>\n\n`;
+                output.appendChild(a);
+                
+                // Also show preview
+                const preview = document.createElement('div');
+                preview.style.cssText = 'margin-top: 20px; padding: 10px; background: #0f0f23; border-radius: 4px; font-size: 12px;';
+                preview.textContent = fileContent.substring(0, 500) + '...';
+                output.appendChild(preview);
+
+            } catch (error) {
+                output.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
