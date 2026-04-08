@@ -80,13 +80,13 @@ const OTHER_PLACE_BACKGROUND = `<svg xmlns="http://www.w3.org/2000/svg" viewBox=
 </svg>`;
 
 const TITLES = [
-  { name: 'Combat Grandmaster', threshold: 400, icon: '../info%20icon/combat_grandmaster.webp', color: '#fbbf24' },
-  { name: 'Combat Master', threshold: 250, icon: '../info%20icon/combat_master.webp', color: '#fcd34d' },
-  { name: 'Combat Ace', threshold: 100, icon: '../info%20icon/combat_ace.webp', color: '#f87171' },
-  { name: 'Combat Specialist', threshold: 50, icon: '../info%20icon/combat_specialist.svg', color: '#c084fc' },
-  { name: 'Combat Cadet', threshold: 20, icon: '../info%20icon/combat_cadet.svg', color: '#818cf8' },
-  { name: 'Combat Novice', threshold: 10, icon: '../info%20icon/combat_novice.svg', color: '#93c5fd' },
-  { name: 'Rookie', threshold: 0, icon: '../info%20icon/rookie.svg', color: '#9ca3af' }
+  { name: 'Combat Grandmaster', threshold: 400, icon: '../info icon/combat_grandmaster.webp', color: '#fbbf24' },
+  { name: 'Combat Master', threshold: 250, icon: '../info icon/combat_master.webp', color: '#fcd34d' },
+  { name: 'Combat Ace', threshold: 100, icon: '../info icon/combat_ace.webp', color: '#f87171' },
+  { name: 'Combat Specialist', threshold: 50, icon: '../info icon/combat_specialist.svg', color: '#c084fc' },
+  { name: 'Combat Cadet', threshold: 20, icon: '../info icon/combat_cadet.svg', color: '#818cf8' },
+  { name: 'Combat Novice', threshold: 10, icon: '../info icon/combat_novice.svg', color: '#93c5fd' },
+  { name: 'Rookie', threshold: 0, icon: '../info icon/rookie.svg', color: '#9ca3af' }
 ];
 
 // Emulate point-based titles roughly based on official site
@@ -506,6 +506,53 @@ export async function renderGamemodeColumns(tierData, slug, container, append = 
 
 export function clearGrid(container) {
   container.innerHTML = '';
+}
+
+/**
+ * Re-initialise tooltips and click handlers for a single newly-added row.
+ * Used when a player is injected by the search flow outside of a full render cycle.
+ */
+export function initNewRow(rowEl) {
+  if (!rowEl) return;
+  // Tooltips on tier badges within the row
+  const tooltipTriggers = rowEl.querySelectorAll('[data-tooltip]');
+  const tooltipContainer = document.getElementById('tier-tooltip-container');
+  if (tooltipContainer) {
+    tooltipTriggers.forEach(trigger => {
+      trigger.addEventListener('mouseenter', (e) => {
+        const html = trigger.getAttribute('data-tooltip');
+        if (!html) return;
+        tooltipContainer.innerHTML = html;
+        tooltipContainer.style.opacity = '1';
+        tooltipContainer.style.transform = 'scale(1)';
+        const rect = trigger.getBoundingClientRect();
+        const tRect = tooltipContainer.getBoundingClientRect();
+        let top = rect.top - tRect.height - 10;
+        let left = rect.left + rect.width / 2 - tRect.width / 2;
+        if (top < 10) top = rect.bottom + 10;
+        if (left < 10) left = 10;
+        else if (left + tRect.width > window.innerWidth - 10) left = window.innerWidth - tRect.width - 10;
+        tooltipContainer.style.top = `${top}px`;
+        tooltipContainer.style.left = `${left}px`;
+      });
+      trigger.addEventListener('mouseleave', () => {
+        tooltipContainer.style.opacity = '0';
+        tooltipContainer.style.transform = 'scale(0.95)';
+      });
+    });
+  }
+  // Profile modal click handler
+  if (rowEl.dataset.player) {
+    rowEl.addEventListener('click', (e) => {
+      if (e.target.closest('a') || e.target.closest('button')) return;
+      try {
+        const player = JSON.parse(rowEl.getAttribute('data-player'));
+        import('./playerProfile.js').then(m => m.openPlayerProfile(player));
+      } catch (err) {
+        console.error('Failed to parse player data:', err);
+      }
+    });
+  }
 }
 
 export function renderSkeletons(container) {

@@ -246,8 +246,12 @@ function createRankingsFromTiers(playerTiers) {
 export async function fetchOverall(count = 50, from = 0) {
   const allPlayers = await fetchAllPlayers();
 
-  // Sort by points (descending)
-  const sorted = [...allPlayers].sort((a, b) => (b.points || 0) - (a.points || 0));
+  // Sort by explicit rank parameter (ascending)
+  const sorted = [...allPlayers].sort((a, b) => {
+      const rankA = a.rank ?? 999999;
+      const rankB = b.rank ?? 999999;
+      return rankA - rankB;
+  });
 
   // Format for renderOverallCards
   return sorted.slice(from, from + count).map((p, index) => ({
@@ -338,6 +342,28 @@ export async function fetchPlayerByName(name) {
     region: p.region,
     points: p.points,
     rankings: createRankingsFromTiers(p.tiers)
+  };
+}
+
+/**
+ * Find a player's true overall rank (1-indexed) across ALL players, and return their data.
+ * Returns { player, rank } or null if not found.
+ */
+export async function fetchPlayerOverallRank(name) {
+  const allPlayers = await fetchAllPlayers();
+
+  const p = allPlayers.find(p => p.username.toLowerCase() === name.toLowerCase());
+  if (!p) return null;
+
+  return {
+    rank: p.rank ?? 999999,
+    player: {
+      uuid: p.uuid || '00000000-0000-0000-0000-000000000000',
+      name: p.username,
+      region: p.region,
+      points: p.points,
+      rankings: createRankingsFromTiers(p.tiers)
+    }
   };
 }
 

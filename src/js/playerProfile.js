@@ -137,10 +137,7 @@ export function closePlayerProfile() {
  * Get player's overall rank position
  */
 function getPlayerOverallPosition(player) {
-    // Sort players by points descending
-    const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
-    const position = sortedPlayers.findIndex(p => p.username === player.username);
-    return position !== -1 ? position + 1 : null;
+    return player.rank ?? null;
 }
 
 /**
@@ -179,6 +176,8 @@ async function buildPlayerProfileHTML(player) {
     const title = getPlayerTitle(player.points);
     const titleColor = titleColors[title] || '#9ca3af';
     const position = getPlayerOverallPosition(player);
+    const isOutsideTop200 = position !== null && position > 200;
+    const displayPosition = isOutsideTop200 ? `${position}-` : (position || '-');
     
     return `
         <div class="player-profile-modal">
@@ -224,7 +223,7 @@ async function buildPlayerProfileHTML(player) {
             
             <div class="player-profile-position">
                 <div class="position-box">
-                    ${position === 1 ? tier1Svg + '<span class="position-rank" style="color: #ffc107;">1</span>' : position === 2 ? tier2Svg + '<span class="position-rank" style="color: #c0c0c0;">2</span>' : position === 3 ? tier3Svg + '<span class="position-rank" style="color: #cd7f32;">3</span>' : `<span class="position-rank" style="color: #ffffff;">${position || '-'}</span>`}
+                    ${position === 1 ? tier1Svg + '<span class="position-rank" style="color: #ffc107;">1</span>' : position === 2 ? tier2Svg + '<span class="position-rank" style="color: #c0c0c0;">2</span>' : position === 3 ? tier3Svg + '<span class="position-rank" style="color: #cd7f32;">3</span>' : `<span class="position-rank" style="color: #ffffff;">${displayPosition}</span>`}
                     <span class="position-text">OVERALL</span>
                     <span class="position-points">(${player.points} points)</span>
                 </div>

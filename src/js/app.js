@@ -2,8 +2,8 @@
  * app.js – MCTiers Clone View/Data Controller
  */
 
-import { fetchGamemodes, fetchOverall, fetchGamemodeRankings, fetchPlayerByName } from './api.js';
-import { renderOverallCards, renderGamemodeColumns, renderHome, renderSkeletons, clearGrid } from './render.js';
+import { fetchGamemodes, fetchOverall, fetchGamemodeRankings, fetchPlayerByName, fetchPlayerOverallRank } from './api.js';
+import { renderOverallCards, renderGamemodeColumns, renderHome, renderSkeletons, clearGrid, initNewRow } from './render.js';
 import { getIcon } from './icons.js';
 
 /* ----------------------------------------------------------
@@ -11,6 +11,7 @@ import { getIcon } from './icons.js';
    ---------------------------------------------------------- */
 const PAGE_SIZE = 9999;
 const SEARCH_DEBOUNCE_MS = 200;
+const OVERALL_MAX_PLAYERS = 200;
 
 const state = {
   mode: 'home',    // Default to home
@@ -293,9 +294,22 @@ async function loadPage(append = false) {
       if (!data || data.length === 0) {
         state.hasMore = false;
       } else {
-        state.players.push(...data);
-        await renderOverallCards(data, $viewContainer, append, from + 1);
-        if (data.length < PAGE_SIZE) state.hasMore = false;
+        // Limit overall leaderboard to top 200 players
+        const currentTotal = state.players.length;
+        const remainingSlots = OVERALL_MAX_PLAYERS - currentTotal;
+        
+        if (remainingSlots <= 0) {
+          state.hasMore = false;
+        } else {
+          const limitedData = data.slice(0, remainingSlots);
+          state.players.push(...limitedData);
+          await renderOverallCards(limitedData, $viewContainer, append, from + 1);
+          
+          // Stop loading if we reached max or got less data than requested
+          if (state.players.length >= OVERALL_MAX_PLAYERS || data.length < PAGE_SIZE) {
+            state.hasMore = false;
+          }
+        }
       }
     } else {
       const data = await fetchGamemodeRankings(state.mode, PAGE_SIZE, from);
@@ -346,19 +360,66 @@ function updateTabIndicator(btn) {
 /* ----------------------------------------------------------
    Local Search (Overall Mode Only fallback to dimming)
    ---------------------------------------------------------- */
-function handleSearch(query) {
-  const norm = query.toLowerCase();
-  
+async function handleSearch(query) {
+  const norm = query.toLowerCase().trim();
+
   if (state.mode === 'overall') {
+    // Remove any previously injected out-of-top200 row
+    const existingExtra = $viewContainer.querySelector('.search-extra-row');
+    if (existingExtra) existingExtra.remove();
+
     const rows = $viewContainer.querySelectorAll('.mctiers-player-row');
+    let foundInTop200 = false;
+
     rows.forEach(r => {
       const name = r.dataset.name || '';
       if (!norm || name.includes(norm)) {
         r.style.display = 'grid';
+        if (norm && name.includes(norm)) foundInTop200 = true;
       } else {
         r.style.display = 'none';
       }
     });
+
+    // If a non-empty query matched nothing in the top 200, search full list
+    if (norm && !foundInTop200) {
+      const result = await fetchPlayerOverallRank(norm);
+      if (result) {
+        const { rank, player } = result;
+        const isOutsideTop200 = rank > OVERALL_MAX_PLAYERS;
+
+        // Build the row HTML using the already-imported renderOverallCards
+        const tempDiv = document.createElement('div');
+        await renderOverallCards([player], tempDiv, false, rank);
+
+        // Get the rendered row
+        const renderedRow = tempDiv.querySelector('.mctiers-player-row');
+        if (renderedRow) {
+          // Wrap in a container div with special class
+          const wrapper = document.createElement('div');
+          wrapper.className = 'search-extra-row';
+
+          if (isOutsideTop200) {
+            // Override rank display with a '-' suffix
+            const rankEl = renderedRow.querySelector('.player-rank');
+            if (rankEl) rankEl.textContent = `${rank}-`;
+            const rankShimmer = renderedRow.querySelector('.rank-in-shimmer');
+            if (rankShimmer) rankShimmer.textContent = `${rank}-`;
+
+            const notice = document.createElement('div');
+            notice.className = 'outside-top200-notice';
+            notice.textContent = `#${rank} overall — outside top ${OVERALL_MAX_PLAYERS}`;
+            wrapper.appendChild(notice);
+          }
+
+          wrapper.appendChild(renderedRow);
+          $viewContainer.appendChild(wrapper);
+
+          // Re-init tooltips & click handlers for the new row
+          initNewRow(renderedRow);
+        }
+      }
+    }
   } else {
     // Basic filtering inside the grid format
     const rows = $viewContainer.querySelectorAll('.gm-player-row');
