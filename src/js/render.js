@@ -80,13 +80,13 @@ const OTHER_PLACE_BACKGROUND = `<svg xmlns="http://www.w3.org/2000/svg" viewBox=
 </svg>`;
 
 const TITLES = [
-  { name: 'Combat Grandmaster', threshold: 400, icon: '../info icon/combat_grandmaster.webp', color: '#fbbf24' },
-  { name: 'Combat Master', threshold: 250, icon: '../info icon/combat_master.webp', color: '#fcd34d' },
-  { name: 'Combat Ace', threshold: 100, icon: '../info icon/combat_ace.webp', color: '#f87171' },
-  { name: 'Combat Specialist', threshold: 50, icon: '../info icon/combat_specialist.svg', color: '#c084fc' },
-  { name: 'Combat Cadet', threshold: 20, icon: '../info icon/combat_cadet.svg', color: '#818cf8' },
-  { name: 'Combat Novice', threshold: 10, icon: '../info icon/combat_novice.svg', color: '#93c5fd' },
-  { name: 'Rookie', threshold: 0, icon: '../info icon/rookie.svg', color: '#9ca3af' }
+  { name: 'Combat Grandmaster', threshold: 400, icon: '../info%20icon/combat_grandmaster.webp', color: '#fbbf24' },
+  { name: 'Combat Master', threshold: 250, icon: '../info%20icon/combat_master.webp', color: '#fcd34d' },
+  { name: 'Combat Ace', threshold: 100, icon: '../info%20icon/combat_ace.webp', color: '#f87171' },
+  { name: 'Combat Specialist', threshold: 50, icon: '../info%20icon/combat_specialist.svg', color: '#c084fc' },
+  { name: 'Combat Cadet', threshold: 20, icon: '../info%20icon/combat_cadet.svg', color: '#818cf8' },
+  { name: 'Combat Novice', threshold: 10, icon: '../info%20icon/combat_novice.svg', color: '#93c5fd' },
+  { name: 'Rookie', threshold: 0, icon: '../info%20icon/rookie.svg', color: '#9ca3af' }
 ];
 
 // Emulate point-based titles roughly based on official site
