@@ -177,7 +177,7 @@ async function buildPlayerProfileHTML(player) {
     const titleColor = titleColors[title] || '#9ca3af';
     const position = getPlayerOverallPosition(player);
     const isOutsideTop200 = position !== null && position > 200;
-    const displayPosition = isOutsideTop200 ? `${position}-` : (position || '-');
+    const displayPosition = position || '-';
     
     return `
         <div class="player-profile-modal">

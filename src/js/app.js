@@ -400,11 +400,11 @@ async function handleSearch(query) {
           wrapper.className = 'search-extra-row';
 
           if (isOutsideTop200) {
-            // Override rank display with a '-' suffix
+            // Override rank display to ensure it shows the pure rank
             const rankEl = renderedRow.querySelector('.player-rank');
-            if (rankEl) rankEl.textContent = `${rank}-`;
+            if (rankEl) rankEl.textContent = `${rank}`;
             const rankShimmer = renderedRow.querySelector('.rank-in-shimmer');
-            if (rankShimmer) rankShimmer.textContent = `${rank}-`;
+            if (rankShimmer) rankShimmer.textContent = `${rank}`;
 
             const notice = document.createElement('div');
             notice.className = 'outside-top200-notice';
