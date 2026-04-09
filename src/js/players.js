@@ -11823,12 +11823,12 @@ export const players = [
                 "retired": null
             },
             "vanilla": {
-                "current": null,
+                "current": "LT3",
                 "peak": null,
                 "retired": null
             },
             "uhc": {
-                "current": "HT4",
+                "current": "HT3",
                 "peak": null,
                 "retired": null
             },
