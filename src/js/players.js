@@ -11828,7 +11828,7 @@ export const players = [
                 "retired": null
             },
             "uhc": {
-                "current": null,
+                "current": "HT4",
                 "peak": null,
                 "retired": null
             },
