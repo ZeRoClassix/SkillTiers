@@ -112,7 +112,7 @@ function buildTierTooltip(slug, r) {
 
   const peak = formatTier(r.peak);
   const current = formatTier(r.current);
-  const retired = r.retired === true ? 'Yes' : (r.retired === false ? 'No' : 'N/A');
+  const retired = r.retired === true ? 'Yes' : 'No';
 
   return `
     <div class="tier-tooltip">
