@@ -567,7 +567,7 @@ export function renderSkeletons(container) {
 /* ----------------------------------------------------------
    Tooltip Initialization
    ---------------------------------------------------------- */
-function initTooltips(container) {
+export function initTooltips(container) {
   // Remove any existing tooltip container
   const existingTooltip = document.getElementById('tier-tooltip-container');
   if (existingTooltip) {

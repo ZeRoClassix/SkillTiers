@@ -3,7 +3,7 @@
  */
 
 import { fetchGamemodes, fetchOverall, fetchGamemodeRankings, fetchPlayerByName, fetchPlayerOverallRank } from './api.js';
-import { renderOverallCards, renderGamemodeColumns, renderHome, renderSkeletons, clearGrid, initNewRow } from './render.js';
+import { renderOverallCards, renderGamemodeColumns, renderHome, renderSkeletons, clearGrid, initNewRow, initTooltips } from './render.js';
 import { getIcon } from './icons.js';
 
 /* ----------------------------------------------------------
@@ -380,6 +380,11 @@ async function handleSearch(query) {
         r.style.display = 'none';
       }
     });
+
+    // If clearing search, re-init tooltips for all visible rows since container may have changed
+    if (!norm) {
+      initTooltips($viewContainer);
+    }
 
     // If a non-empty query matched nothing in the top 200, search full list
     if (norm && !foundInTop200) {
