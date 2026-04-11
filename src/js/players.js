@@ -11823,7 +11823,7 @@ export const players = [
                 "retired": null
             },
             "vanilla": {
-                "current": "LT3",
+                "current": "LT2",
                 "peak": null,
                 "retired": null
             },
@@ -11833,17 +11833,17 @@ export const players = [
                 "retired": null
             },
             "pot": {
-                "current": null,
+                "current": "LT2",
                 "peak": null,
                 "retired": null
             },
             "nethop": {
-                "current": null,
+                "current": "HT2",
                 "peak": null,
                 "retired": null
             },
             "smp": {
-                "current": null,
+                "current": "LT3",
                 "peak": null,
                 "retired": null
             },
