@@ -2412,104 +2412,104 @@ button {
 
 /* Tier Colors with Glow Effects - HT (High Tier) - Overall Tab */
 .mctiers-tier-badge.tier-ht1 {
-  background: rgba(255, 193, 7, 0.25);
-  border-color: rgba(255, 193, 7, 0.6);
-  box-shadow: 0 0 15px rgba(255, 193, 7, 0.4), 0 0 30px rgba(255, 193, 7, 0.2);
+  background: rgba(251, 191, 36, 0.25);
+  border-color: rgba(251, 191, 36, 0.6);
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.4), 0 0 30px rgba(251, 191, 36, 0.2);
 }
 
 .mctiers-tier-badge.tier-ht1 .tier-label {
-  color: #ffc107;
+  color: var(--pill-ht1);
 }
 
 .mctiers-tier-badge.tier-ht2 {
-  background: rgba(229, 231, 235, 0.25);
-  border-color: rgba(229, 231, 235, 0.6);
-  box-shadow: 0 0 15px rgba(229, 231, 235, 0.4), 0 0 30px rgba(229, 231, 235, 0.2);
+  background: rgba(235, 241, 177, 0.25);
+  border-color: rgba(235, 241, 177, 0.6);
+  box-shadow: 0 0 15px rgba(235, 241, 177, 0.4), 0 0 30px rgba(235, 241, 177, 0.2);
 }
 
 .mctiers-tier-badge.tier-ht2 .tier-label {
-  color: #e5e7eb;
+  color: var(--pill-ht2);
 }
 
 .mctiers-tier-badge.tier-ht3 {
-  background: rgba(249, 115, 22, 0.25);
-  border-color: rgba(249, 115, 22, 0.6);
-  box-shadow: 0 0 15px rgba(249, 115, 22, 0.4), 0 0 30px rgba(249, 115, 22, 0.2);
+  background: rgba(252, 114, 16, 0.25);
+  border-color: rgba(252, 114, 16, 0.6);
+  box-shadow: 0 0 15px rgba(252, 114, 16, 0.4), 0 0 30px rgba(252, 114, 16, 0.2);
 }
 
 .mctiers-tier-badge.tier-ht3 .tier-label {
-  color: #f97316;
+  color: var(--pill-ht3);
 }
 
 .mctiers-tier-badge.tier-ht4 {
-  background: rgba(139, 92, 246, 0.25);
-  border-color: rgba(139, 92, 246, 0.6);
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4), 0 0 30px rgba(139, 92, 246, 0.2);
+  background: rgba(168, 77, 253, 0.25);
+  border-color: rgba(168, 77, 253, 0.6);
+  box-shadow: 0 0 15px rgba(168, 77, 253, 0.4), 0 0 30px rgba(168, 77, 253, 0.2);
 }
 
 .mctiers-tier-badge.tier-ht4 .tier-label {
-  color: #8b5cf6;
+  color: var(--pill-ht4);
 }
 
 .mctiers-tier-badge.tier-ht5 {
-  background: rgba(107, 114, 128, 0.25);
-  border-color: rgba(107, 114, 128, 0.6);
-  box-shadow: 0 0 15px rgba(107, 114, 128, 0.4), 0 0 30px rgba(107, 114, 128, 0.2);
+  background: rgba(121, 128, 143, 0.25);
+  border-color: rgba(121, 128, 143, 0.6);
+  box-shadow: 0 0 15px rgba(121, 128, 143, 0.4), 0 0 30px rgba(121, 128, 143, 0.2);
 }
 
 .mctiers-tier-badge.tier-ht5 .tier-label {
-  color: #6b7280;
+  color: var(--pill-ht5);
 }
 
 /* Tier Colors with Glow Effects - LT (Low Tier) - Overall Tab */
 .mctiers-tier-badge.tier-lt1 {
-  background: rgba(253, 186, 116, 0.2);
-  border-color: rgba(253, 186, 116, 0.5);
-  box-shadow: 0 0 12px rgba(253, 186, 116, 0.3), 0 0 24px rgba(253, 186, 116, 0.15);
+  background: rgba(189, 144, 11, 0.2);
+  border-color: rgba(189, 144, 11, 0.5);
+  box-shadow: 0 0 12px rgba(189, 144, 11, 0.3), 0 0 24px rgba(189, 144, 11, 0.15);
 }
 
 .mctiers-tier-badge.tier-lt1 .tier-label {
-  color: #fdba74;
+  color: var(--pill-lt1);
 }
 
 .mctiers-tier-badge.tier-lt2 {
-  background: rgba(209, 213, 219, 0.2);
-  border-color: rgba(209, 213, 219, 0.5);
-  box-shadow: 0 0 12px rgba(209, 213, 219, 0.3), 0 0 24px rgba(209, 213, 219, 0.15);
+  background: rgba(202, 200, 173, 0.2);
+  border-color: rgba(202, 200, 173, 0.5);
+  box-shadow: 0 0 12px rgba(202, 200, 173, 0.3), 0 0 24px rgba(202, 200, 173, 0.15);
 }
 
 .mctiers-tier-badge.tier-lt2 .tier-label {
-  color: #d1d5db;
+  color: var(--pill-lt2);
 }
 
 .mctiers-tier-badge.tier-lt3 {
-  background: rgba(251, 146, 60, 0.2);
-  border-color: rgba(251, 146, 60, 0.5);
-  box-shadow: 0 0 12px rgba(251, 146, 60, 0.3), 0 0 24px rgba(251, 146, 60, 0.15);
+  background: rgba(179, 59, 11, 0.2);
+  border-color: rgba(179, 59, 11, 0.5);
+  box-shadow: 0 0 12px rgba(179, 59, 11, 0.3), 0 0 24px rgba(179, 59, 11, 0.15);
 }
 
 .mctiers-tier-badge.tier-lt3 .tier-label {
-  color: #fb923c;
+  color: var(--pill-lt3);
 }
 
 .mctiers-tier-badge.tier-lt4 {
-  background: rgba(167, 139, 250, 0.2);
-  border-color: rgba(167, 139, 250, 0.5);
-  box-shadow: 0 0 12px rgba(167, 139, 250, 0.3), 0 0 24px rgba(167, 139, 250, 0.15);
+  background: rgba(110, 25, 184, 0.2);
+  border-color: rgba(110, 25, 184, 0.5);
+  box-shadow: 0 0 12px rgba(110, 25, 184, 0.3), 0 0 24px rgba(110, 25, 184, 0.15);
 }
 
 .mctiers-tier-badge.tier-lt4 .tier-label {
-  color: #a78bfa;
+  color: var(--pill-lt4);
 }
 
 .mctiers-tier-badge.tier-lt5 {
-  background: rgba(156, 163, 175, 0.2);
-  border-color: rgba(156, 163, 175, 0.5);
-  box-shadow: 0 0 12px rgba(156, 163, 175, 0.3), 0 0 24px rgba(156, 163, 175, 0.15);
+  background: rgba(62, 68, 77, 0.2);
+  border-color: rgba(62, 68, 77, 0.5);
+  box-shadow: 0 0 12px rgba(62, 68, 77, 0.3), 0 0 24px rgba(62, 68, 77, 0.15);
 }
 
 .mctiers-tier-badge.tier-lt5 .tier-label {
-  color: #9ca3af;
+  color: var(--pill-lt5);
 }
 
 /* Retired Tiers - Gray Glow, Dimmed */
