@@ -56,6 +56,13 @@ async function init() {
   $loadBtn.addEventListener('click', () => loadPage(true));
   document.getElementById('retry-btn').addEventListener('click', () => loadPage(false));
 
+  // Re-init tooltips when player profile modal closes (modal removes shared tooltip container)
+  document.addEventListener('playerProfileClosed', () => {
+    if (state.mode === 'overall') {
+      initTooltips($viewContainer);
+    }
+  });
+
     // Handle Main Navigation (Home vs Rankings)
   document.querySelectorAll('.site-header .nav-item').forEach(item => {
     item.addEventListener('click', (e) => {

@@ -43,22 +43,22 @@ export function initPlayerProfileModal() {
     console.log('Initializing player profile modal...');
     const overlay = document.getElementById('player-profile-overlay');
     const modalRoot = document.getElementById('player-profile-modal-root');
-    
+
     console.log('Overlay:', overlay);
     console.log('Modal root:', modalRoot);
-    
+
     if (!overlay || !modalRoot) {
         console.error('Modal elements not found!');
         return;
     }
-    
+
     // Close modal on overlay click
     overlay.addEventListener('click', (e) => {
         if (e.target === overlay) {
             closePlayerProfile();
         }
     });
-    
+
     // Close on escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && overlay.classList.contains('active')) {
@@ -74,15 +74,15 @@ export async function openPlayerProfile(player) {
     console.log('Opening player profile for:', player);
     const overlay = document.getElementById('player-profile-overlay');
     const modalRoot = document.getElementById('player-profile-modal-root');
-    
+
     console.log('Overlay:', overlay);
     console.log('Modal root:', modalRoot);
-    
+
     if (!overlay || !modalRoot) {
         console.error('Modal elements not found!');
         return;
     }
-    
+
     // If player object is missing required fields, look up full player data
     let fullPlayer = player;
     if (!player.username && player.name) {
@@ -95,22 +95,22 @@ export async function openPlayerProfile(player) {
         }
         console.log('Found full player data:', fullPlayer);
     }
-    
+
     currentModalPlayer = fullPlayer;
-    
+
     // Build modal content
     const modalHTML = await buildPlayerProfileHTML(fullPlayer);
     console.log('Modal HTML:', modalHTML);
     modalRoot.innerHTML = modalHTML;
-    
+
     // Initialize tooltips for modal tier badges (same as overall tab)
     initModalTooltips(modalRoot);
-    
+
     // Show modal - remove closing class first to ensure animation works
     overlay.classList.remove('closing');
     overlay.classList.add('active');
     document.body.classList.add('modal-open');
-    
+
     console.log('Modal should be visible now');
 }
 
@@ -119,17 +119,19 @@ export async function openPlayerProfile(player) {
  */
 export function closePlayerProfile() {
     const overlay = document.getElementById('player-profile-overlay');
-    
+
     if (!overlay) return;
-    
+
     // Add closing class for smooth animation
     overlay.classList.add('closing');
-    
+
     // Wait for animation to finish before hiding
     setTimeout(() => {
         overlay.classList.remove('active', 'closing');
         document.body.classList.remove('modal-open');
         currentModalPlayer = null;
+        // Dispatch event so overall tab can re-initialize tooltips
+        document.dispatchEvent(new CustomEvent('playerProfileClosed'));
     }, 300);
 }
 
@@ -178,7 +180,7 @@ async function buildPlayerProfileHTML(player) {
     const position = getPlayerOverallPosition(player);
     const isOutsideTop200 = position !== null && position > 200;
     const displayPosition = position || '-';
-    
+
     return `
         <div class="player-profile-modal">
             <button class="player-profile-close" onclick="window.closePlayerProfile()" aria-label="Close">
@@ -244,7 +246,7 @@ async function buildPlayerProfileHTML(player) {
  */
 async function buildTiersGridHTML(player) {
     if (!player.tiers) return '';
-    
+
     const gamemodeList = [
         { key: 'vanilla', label: 'Vanilla' },
         { key: 'uhc', label: 'UHC' },
@@ -255,40 +257,40 @@ async function buildTiersGridHTML(player) {
         { key: 'axe', label: 'Axe' },
         { key: 'mace', label: 'Mace' }
     ];
-    
+
     const tierHTMLs = await Promise.all(gamemodeList.map(async (gm) => {
         const tierData = player.tiers[gm.key];
         if (!tierData || (!tierData.current && !tierData.peak)) {
             return '';
         }
-        
+
         const currentTier = tierData.current;
         const peakTier = tierData.peak;
         const isRetired = tierData.retired;
-        
+
         // Determine which tier to display (current, peak, or retired)
         let displayTier = currentTier || peakTier;
         let tierClass = '';
         let extraClasses = [];
-        
+
         if (displayTier) {
             const tierLower = displayTier.toLowerCase();
             tierClass = `tier-${tierLower}`;
-            
+
             if (isRetired) {
                 extraClasses.push('retired-tier');
             }
-            
+
             // Check if this is peak tier
             if (peakTier && !isRetired && currentTier !== peakTier) {
                 extraClasses.push('peak-tier');
             }
         }
-        
+
         // Build tooltip HTML matching overall tab format
         const tooltipHtml = buildTierTooltipHTML(gm.label, tierData);
         const iconHtml = await getIcon(gm.key);
-        
+
         return `
             <div class="mctiers-tier-badge ${tierClass} ${extraClasses.join(' ')}" data-tooltip="${tooltipHtml}">
                 <div class="tier-icon">
@@ -298,7 +300,7 @@ async function buildTiersGridHTML(player) {
             </div>
         `;
     }));
-    
+
     return tierHTMLs.join('');
 }
 
@@ -307,7 +309,7 @@ async function buildTiersGridHTML(player) {
  */
 function buildTierTooltipHTML(gamemodeName, tierData) {
     let html = `<div class="tier-tooltip"><div class="tooltip-header">${gamemodeName}</div>`;
-    
+
     if (tierData.current) {
         const tierClass = tierData.current.toLowerCase();
         html += `<div class="tooltip-row"><span class="tooltip-label">Current</span><span class="tooltip-value ${tierClass}">${tierData.current}</span></div>`;
@@ -319,7 +321,7 @@ function buildTierTooltipHTML(gamemodeName, tierData) {
     if (tierData.retired) {
         html += `<div class="tooltip-row"><span class="tooltip-label">Status</span><span class="tooltip-value" style="background: #6b7280; color: #fff;">Retired</span></div>`;
     }
-    
+
     html += `</div>`;
     return html.replace(/"/g, '&quot;');
 }
