@@ -5,6 +5,65 @@
  */
 
 export const players = [
+        {
+        "username": "Marlowww",
+        "uuid": "d219c8ee-d32e-4da2-b22e-0aa69d36c88a",
+        "rank": 1,
+        "points": 450,
+        "region": "NA",
+        "tiers": {
+            "overall": {
+                "current": null,
+                "peak": null,
+                "retired": null
+            },
+            "ltm": {
+                "current": null,
+                "peak": null,
+                "retired": null
+            },
+            "vanilla": {
+                "current": null,
+                "peak": "HT1",
+                "retired": true
+            },
+            "uhc": {
+                "current": null,
+                "peak": "LT1",
+                "retired": true
+            },
+            "pot": {
+                "current": null,
+                "peak": "HT1",
+                "retired": true
+            },
+            "nethop": {
+                "current": null,
+                "peak": "HT1",
+                "retired": true
+            },
+            "smp": {
+                "current": null,
+                "peak": "HT1",
+                "retired": false
+            },
+            "sword": {
+                "current": "HT1",
+                "peak": "HT1",
+                "retired": false
+            },
+            "axe": {
+                "current": null,
+                "peak": "LT1",
+                "retired": true
+            },
+            "mace": {
+                "current": null,
+                "peak": "LT1",
+                "retired": false
+            }
+        }
+    },
     {
         "username": "ItzRealMe",
         "uuid": "06ec3577-3299-45fa-bbdf-613b1f86c8ab",
