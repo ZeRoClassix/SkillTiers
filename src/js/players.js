@@ -11867,7 +11867,7 @@ export const players = [
     {
         "username": "classix",
         "uuid": "5110cec6-9db5-4df0-a447-f606bb55a3fd",
-        "rank": 202,
+        "rank": 212,
         "points": 62,
         "region": "EU",
         "tiers": {
@@ -11882,7 +11882,7 @@ export const players = [
                 "retired": null
             },
             "vanilla": {
-                "current": "LT2",
+                "current": "HT3",
                 "peak": null,
                 "retired": null
             },
