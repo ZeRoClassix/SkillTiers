@@ -11867,8 +11867,8 @@ export const players = [
     {
         "username": "classix",
         "uuid": "5110cec6-9db5-4df0-a447-f606bb55a3fd",
-        "rank": 89142,
-        "points": 6,
+        "rank": 131,
+        "points": 72,
         "region": "EU",
         "tiers": {
             "overall": {
@@ -11882,27 +11882,27 @@ export const players = [
                 "retired": null
             },
             "vanilla": {
-                "current": null,
+                "current": "LT2",
                 "peak": null,
                 "retired": null
             },
             "uhc": {
-                "current": "LT3",
+                "current": "HT3",
                 "peak": null,
                 "retired": null
             },
             "pot": {
-                "current": null,
+                "current": "LT3",
                 "peak": null,
                 "retired": null
             },
             "nethop": {
-                "current": null,
+                "current": "LT2",
                 "peak": null,
                 "retired": null
             },
             "smp": {
-                "current": null,
+                "current": "LT3",
                 "peak": null,
                 "retired": null
             },
@@ -11912,7 +11912,7 @@ export const players = [
                 "retired": null
             },
             "axe": {
-                "current": null,
+                "current": "HT3",
                 "peak": null,
                 "retired": null
             },
