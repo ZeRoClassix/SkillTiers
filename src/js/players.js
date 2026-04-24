@@ -127,7 +127,7 @@ export const players = [
         "username": "coldified",
         "uuid": "7e8a77ca-daf1-4224-ae1d-2df8bab1eccb",
         "rank": 3,
-        "points": 311,
+        "points": 326,
         "region": "EU",
         "tiers": {
             "overall": {
@@ -146,12 +146,12 @@ export const players = [
                 "retired": false
             },
             "uhc": {
-                "current": "LT1",
+                "current": null,
                 "peak": "HT1",
-                "retired": false
+                "retired": true
             },
             "pot": {
-                "current": "HT2",
+                "current": "LT1",
                 "peak": "HT2",
                 "retired": false
             },
@@ -166,14 +166,14 @@ export const players = [
                 "retired": true
             },
             "sword": {
-                "current": "LT1",
+                "current": null,
                 "peak": "LT1",
-                "retired": false
+                "retired": true
             },
             "axe": {
-                "current": "LT1",
+                "current": "null,
                 "peak": "LT1",
-                "retired": false
+                "retired": true
             },
             "mace": {
                 "current": "LT1",
@@ -200,24 +200,24 @@ export const players = [
                 "retired": null
             },
             "vanilla": {
-                "current": "HT3",
+                "current": "LT3",
                 "peak": "LT2",
                 "retired": false
             },
             "uhc": {
-                "current": "HT1",
-                "peak": "HT1",
-                "retired": false
-            },
-            "pot": {
                 "current": null,
-                "peak": "LT2",
+                "peak": "HT1",
                 "retired": true
             },
-            "nethop": {
-                "current": "LT2",
-                "peak": "HT2",
+            "pot": {
+                "current": "HT3",
+                "peak": "LT2",
                 "retired": false
+            },
+            "nethop": {
+                "current": null,
+                "peak": "HT2",
+                "retired": true
             },
             "smp": {
                 "current": null,
@@ -225,14 +225,14 @@ export const players = [
                 "retired": true
             },
             "sword": {
-                "current": "LT2",
+                "current": null,
                 "peak": "LT2",
-                "retired": false
+                "retired": true
             },
             "axe": {
-                "current": "HT1",
+                "current": null,
                 "peak": "HT1",
-                "retired": false
+                "retired": true
             },
             "mace": {
                 "current": "LT3",
@@ -11867,8 +11867,8 @@ export const players = [
     {
         "username": "classix",
         "uuid": "5110cec6-9db5-4df0-a447-f606bb55a3fd",
-        "rank": 131,
-        "points": 72,
+        "rank": 89142,
+        "points": 6,
         "region": "EU",
         "tiers": {
             "overall": {
@@ -11882,27 +11882,27 @@ export const players = [
                 "retired": null
             },
             "vanilla": {
-                "current": "LT2",
+                "current": null,
                 "peak": null,
                 "retired": null
             },
             "uhc": {
-                "current": "HT3",
+                "current": "LT3",
                 "peak": null,
                 "retired": null
             },
             "pot": {
-                "current": "LT3",
+                "current": null,
                 "peak": null,
                 "retired": null
             },
             "nethop": {
-                "current": "LT2",
+                "current": null,
                 "peak": null,
                 "retired": null
             },
             "smp": {
-                "current": "LT3",
+                "current": null,
                 "peak": null,
                 "retired": null
             },
@@ -11912,7 +11912,7 @@ export const players = [
                 "retired": null
             },
             "axe": {
-                "current": "HT3",
+                "current": null,
                 "peak": null,
                 "retired": null
             },
