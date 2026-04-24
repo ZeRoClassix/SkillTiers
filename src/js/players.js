@@ -171,7 +171,7 @@ export const players = [
                 "retired": true
             },
             "axe": {
-                "current": "null,
+                "current": null,
                 "peak": "LT1",
                 "retired": true
             },
