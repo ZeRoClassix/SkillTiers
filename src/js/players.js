@@ -11887,7 +11887,7 @@ export const players = [
                 "retired": null
             },
             "uhc": {
-                "current": "LT3",
+                "current": "HT3",
                 "peak": null,
                 "retired": null
             },
@@ -11917,7 +11917,7 @@ export const players = [
                 "retired": null
             },
             "mace": {
-                "current": null,
+                "current": "LT3",
                 "peak": null,
                 "retired": null
             }
