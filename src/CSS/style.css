@@ -905,12 +905,6 @@ button {
   color: #fff;
 }
 
-.gm-row-points {
-  font-size: 0.65rem;
-  color: #9ca3af;
-  font-weight: 500;
-}
-
 .gm-row-region {
   transform: scale(0.85);
   transform-origin: right center;
@@ -1774,7 +1768,7 @@ button {
 }
 
 .gm-player-row {
-  cursor: help;
+  cursor: pointer;
 }
 
 /* ----------------------------------------------------------
