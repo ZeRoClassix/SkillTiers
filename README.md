@@ -2,13 +2,13 @@
  
 ## 👤 Project Ownership
  
-**This project is completely owned, designed, and developed by Classix.**
+**This project is completely owned, designed, and developed by Classix (you).**
  
 All HTML, CSS, and JavaScript code in this repository was personally written by Classix. This includes:
 - All frontend structure (`src/index.html`)
 - All styling (`src/CSS/style.css`)
 - All JavaScript logic (`src/js/*.js`)
-- Player data structure and tier definitions (`src/js/players.js`)
+- Runtime player loader (`src/js/players.js`) and manual overrides (`src/js/players.override.js`)
  
 This is a solo-developed project with no third-party code contributors.
  
@@ -46,14 +46,15 @@ Leaderboard2/
 │   │   ├── app.js             # Main app logic, tab switching, state management
 │   │   ├── render.js          # DOM rendering functions, leaderboard display
 │   │   ├── playerProfile.js   # Player profile modal functionality
-│   │   ├── players.js         # Player data (300k+ lines of tier data)
+│   │   ├── players.js         # Runtime MCTiers API loader
+│   │   ├── players.override.js # Manual player overrides only
 │   │   ├── api.js             # API integration with MCTiers
 │   │   └── icons.js           # SVG icon definitions
 │   ├── index.html             # Main HTML structure
 │   └── assets/
 │       ├── tabs/              # Gamemode SVG icons
 │       └── skins/             # Player skin images
-├── fix-retired.js             # Node.js script to fix retired player tiers
+├── fetch-players.mjs          # Verifies live API loading without writing players.js
 ├── webpack.config.js          # Build configuration
 └── package.json               # Dependencies
 ```
@@ -62,22 +63,20 @@ Leaderboard2/
  
 ## 🎨 Where & How to Edit
  
-### 1. **Editing Player Data**
-**File**: `src/js/players.js`
+### 1. **Editing Player Overrides**
+**File**: `src/js/players.override.js`
  
-This file contains all player tier information. Structure for each player:
+`src/js/players.js` fetches the full live MCTiers v2 player list at runtime. Do not paste the raw API player list into `players.js`; only custom overrides belong in `players.override.js`.
+
+Use this same player structure for each override:
  
 ```javascript
 {
-  "id": "player_uuid",
-  "name": "PlayerName",
+  "username": "PlayerName",
+  "uuid": "player_uuid",
   "points": 1500,
   "rank": 1,
   "region": "NA",
-  "gamemodeStats": {
-    "vanilla": { "wins": 100, "losses": 50, "matches": 150 },
-    // ... other gamemodes
-  },
   "tiers": {
     "overall": { "current": "HT2", "peak": "HT2", "retired": false },
     "vanilla": { "current": null, "peak": "HT1", "retired": true },
@@ -87,12 +86,12 @@ This file contains all player tier information. Structure for each player:
 }
 ```
  
-**Important**: If `retired: true`, set `current: null` to show "N/A"
- 
-**To batch-fix retired players**, run:
-```bash
-node fix-retired.js
-```
+Matching rules:
+- `uuid` is matched first when present
+- otherwise `username` is matched case-insensitively
+- if neither matches an API player, the override becomes a new player
+
+For username changes, include the existing player's UUID so the override can find the right API player before replacing the name.
  
 ---
  
@@ -224,15 +223,15 @@ const discordUrls = {
 npm install
  
 # Start development server
-npm run dev
+npm start
  
 # Or just open src/index.html directly in browser
 ```
  
 **Updating Player Data**:
-1. Edit `src/js/players.js` directly
-2. Or use the fix-retired.js script for batch updates
-3. Refresh browser to see changes
+1. Edit `src/js/players.override.js`
+2. Add only the players you want to override or create manually
+3. Refresh browser to merge overrides with the live MCTiers API data
  
 **Changing Colors/Styles**:
 1. Edit `src/CSS/style.css`
@@ -300,9 +299,9 @@ Dynamic based on `state.mode`:
 ## 🔧 Common Tasks
  
 ### Change a Player's Tier
-1. Open `src/js/players.js`
-2. Find the player by name (Ctrl+F)
-3. Edit their tier object:
+1. Open `src/js/players.override.js`
+2. Add an override entry with the player's `uuid` or current `username`
+3. Set the tier object you want to override:
 ```javascript
 "vanilla": {
   "current": "HT2",      // Change this
@@ -317,17 +316,9 @@ Dynamic based on `state.mode`:
 3. Edit the `background` gradient values
  
 ### Add a New Player
-1. Copy an existing player object
-2. Change the `id`, `name`, and all stats
-3. Add to the `players` array
-4. Ensure they have tier data for all gamemodes
- 
-### Fix Retired Players
-Run the included script:
-```bash
-node fix-retired.js
-```
-This sets `current: null` for all tiers where `retired: true`.
+1. Add a full player object to `src/js/players.override.js`
+2. Use the same `username`, `uuid`, `rank`, `points`, `region`, and `tiers` shape
+3. If the name/UUID does not match the API, the override is added as a new player
  
 ---
  
@@ -366,7 +357,7 @@ Edit in `src/CSS/style.css` - search for `@media` queries.
  
 ## 📝 Notes for Future Development
  
-1. **Data Updates**: Always run `fix-retired.js` after bulk editing players.js
+1. **Data Updates**: Keep generated API data out of `players.js`; put manual changes in `players.override.js`
 2. **Testing**: Check both light and dark modes (if implemented)
 3. **Performance**: Don't load all player data on home tab
 4. **Accessibility**: Maintain focus outlines and ARIA labels
@@ -380,9 +371,10 @@ For questions about this codebase, refer to:
 - This README
 - Code comments in each file
 - The structure documented above
-- Or contact me :
-  - Discord : mtz.classix
-
+ 
+**Remember**: You built this. You own this. You know it better than anyone.
+ 
+---
  
 *Last updated: April 2026*
 *Author: Classix*
