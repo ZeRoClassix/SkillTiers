@@ -19,6 +19,8 @@ const TAB_ICON_PATHS = {
 
 // Inline SVG cache to avoid repeated fetches
 const svgCache = new Map();
+const svgTemplateCache = new Map();
+let iconInstanceCounter = 0;
 
 /**
  * Get icon HTML for a gamemode slug
@@ -33,59 +35,58 @@ export async function getIcon(slug) {
   }
 
   try {
-    let svgContent;
-    // Return cached raw SVG if available to avoid refetching
-    if (svgCache.has(norm)) {
-      svgContent = svgCache.get(norm);
-    } else {
-      const response = await fetch(iconPath);
-      if (!response.ok) throw new Error('Failed to load SVG');
-      svgContent = await response.text();
-      svgCache.set(norm, svgContent);
-    }
-
-    // Extract original viewBox or synthesize one from width/height (stripping units like px)
-    const vbMatch = svgContent.match(/viewBox\s*=\s*["']([\s\d.,-]+)["']/i);
-    let viewBox = vbMatch ? vbMatch[1] : null;
-
-    if (!viewBox) {
-      const wMatch = svgContent.match(/width\s*=\s*["']([\d.]+)[^"']*["']/i);
-      const hMatch = svgContent.match(/height\s*=\s*["']([\d.]+)[^"']*["']/i);
-      if (wMatch && hMatch) {
-        viewBox = `0 0 ${wMatch[1]} ${hMatch[1]}`;
+    let svgTemplate = svgTemplateCache.get(norm);
+    if (!svgTemplate) {
+      let svgContent;
+      if (svgCache.has(norm)) {
+        svgContent = svgCache.get(norm);
       } else {
-        viewBox = "0 0 24 24"; // Safe default for UI icons
+        const response = await fetch(iconPath);
+        if (!response.ok) throw new Error('Failed to load SVG');
+        svgContent = await response.text();
+        svgCache.set(norm, svgContent);
       }
+
+      const vbMatch = svgContent.match(/viewBox\s*=\s*["']([\s\d.,-]+)["']/i);
+      let viewBox = vbMatch ? vbMatch[1] : null;
+
+      if (!viewBox) {
+        const wMatch = svgContent.match(/width\s*=\s*["']([\d.]+)[^"']*["']/i);
+        const hMatch = svgContent.match(/height\s*=\s*["']([\d.]+)[^"']*["']/i);
+        if (wMatch && hMatch) {
+          viewBox = `0 0 ${wMatch[1]} ${hMatch[1]}`;
+        } else {
+          viewBox = '0 0 24 24';
+        }
+      }
+
+      svgContent = svgContent.replace(/<svg([^>]*)>/i, (match, attrs) => {
+        const cleanAttrs = attrs
+          .replace(/\b(width|height|viewBox|style|preserveAspectRatio|xmlns:xlink)\s*=\s*["'][^"']*["']/gi, '')
+          .trim();
+        return `<svg width="100%" height="100%" viewBox="${viewBox}" style="display:block; width:100%; height:100%; overflow:hidden;" preserveAspectRatio="xMidYMid meet" ${cleanAttrs}>`;
+      });
+
+      svgContent = svgContent.replace(/<style[^>]*>([\s\S]*?)<\/style>/i, (match) => {
+        return match.replace(/\.([a-zA-Z0-9_-]+)\s*\{/g, `.__ICON_PREFIX__$1 {`);
+      });
+
+      svgContent = svgContent.replace(/class="([^"]+)"/g, (match, classList) => {
+        const prefixedClasses = classList.split(/\s+/).map((className) => `__ICON_PREFIX__${className}`).join(' ');
+        return `class="${prefixedClasses}"`;
+      });
+
+      svgContent = svgContent.replace(/id="([^"]+)"/gi, 'id="__ICON_PREFIX__$1"');
+      svgContent = svgContent.replace(/url\(\s*#([^)]+)\s*\)/gi, 'url(#__ICON_PREFIX__$1)');
+      svgContent = svgContent.replace(/href="#([^"]+)"/gi, 'href="#__ICON_PREFIX__$1"');
+
+      svgTemplate = `<div class="icon-svg-wrapper" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${svgContent}</div>`;
+      svgTemplateCache.set(norm, svgTemplate);
     }
 
-    // Force consistent sizing for all SVGs - update essential attributes but keep others
-    svgContent = svgContent.replace(/<svg([^>]*)>/i, (match, attrs) => {
-      const cleanAttrs = attrs.replace(/\b(width|height|viewBox|style|preserveAspectRatio|xmlns:xlink)\s*=\s*["'][^"']*["']/gi, '').trim();
-      return `<svg width="100%" height="100%" viewBox="${viewBox}" style="display:block; width:100%; height:100%; overflow:hidden;" preserveAspectRatio="xMidYMid meet" ${cleanAttrs}>`;
-    });
-
-    // Isolate SVG styles to prevent class name bleeding - prefix with gamemode slug and a random tag
-    const prefix = `svg-${norm}-${Math.random().toString(36).substring(2, 6)}-`;
-    // Replace class names in <style> block: .st0 -> .svg-overall-st0
-    svgContent = svgContent.replace(/<style[^>]*>([\s\S]*?)<\/style>/i, (match, css) => {
-      // Find all class selectors: .st0, .st1, etc.
-      return match.replace(/\.([a-zA-Z0-9_-]+)\s*\{/g, `.${prefix}$1 {`);
-    });
-    // Replace class usage in elements: class="st0" -> class="svg-overall-st0"
-    svgContent = svgContent.replace(/class="([^"]+)"/g, (match, classList) => {
-      const prefixedClasses = classList.split(/\s+/).map(c => `${prefix}${c}`).join(' ');
-      return `class="${prefixedClasses}"`;
-    });
-
-    // Fix IDs to prevent collisions
-    svgContent = svgContent.replace(/id="([^"]+)"/gi, `id="${prefix}$1"`);
-    svgContent = svgContent.replace(/url\(\s*#([^)]+)\s*\)/gi, `url(#${prefix}$1)`);
-    svgContent = svgContent.replace(/href="#([^"]+)"/gi, `href="#${prefix}$1"`);
-
-    // Wrap in a container that ensures consistent display size
-    const wrappedContent = `<div class="icon-svg-wrapper" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${svgContent}</div>`;
-
-    return wrappedContent;
+    iconInstanceCounter += 1;
+    const prefix = `svg-${norm}-${iconInstanceCounter}-`;
+    return svgTemplate.replaceAll('__ICON_PREFIX__', prefix);
   } catch (err) {
     console.warn(`Failed to load icon for ${slug}:`, err);
     return getFallbackIcon(norm);

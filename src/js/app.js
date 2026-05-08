@@ -9,7 +9,8 @@ import { getIcon } from './icons.js';
 /* ----------------------------------------------------------
    Constants / Config
    ---------------------------------------------------------- */
-const PAGE_SIZE = 9999;
+const PAGE_SIZE = 100;
+const GAMEMODE_PAGE_SIZE = 100;
 const SEARCH_DEBOUNCE_MS = 200;
 const OVERALL_MAX_PLAYERS = 200;
 
@@ -58,7 +59,7 @@ async function init() {
 
   // Re-init tooltips when player profile modal closes (modal removes shared tooltip container)
   document.addEventListener('playerProfileClosed', () => {
-    if (state.mode === 'overall') {
+    if (state.mode !== 'home') {
       initTooltips($viewContainer);
     }
   });
@@ -207,17 +208,18 @@ async function loadTabs() {
       </button>
     `;
 
-    // Load other tab icons asynchronously
-    for (const slug of modes) {
-      if (slug === 'overall') continue;
+    const otherModes = modes.filter((slug) => slug !== 'overall');
+    const tabEntries = await Promise.all(otherModes.map(async (slug) => ({
+      slug,
+      iconHtml: await getIcon(slug),
+    })));
 
-      const tabIconHtml = await getIcon(slug);
-      // Capitalize first letter for display
+    for (const { slug, iconHtml } of tabEntries) {
       const displayName = slug.charAt(0).toUpperCase() + slug.slice(1);
 
       $tabsNav.insertAdjacentHTML('beforeend', `
         <button class="tab-btn tab-btn-gamemode-${slug}" data-mode="${slug}">
-          <div class="tab-icon">${tabIconHtml}</div>
+          <div class="tab-icon">${iconHtml}</div>
           <span class="tab-text">${displayName}</span>
         </button>
       `);
@@ -293,7 +295,8 @@ async function loadPage(append = false) {
   state.isLoading = true;
   if (append) $loadBtn.textContent = "Loading...";
 
-  const from = state.page * PAGE_SIZE;
+  const pageSize = state.mode === 'overall' ? PAGE_SIZE : GAMEMODE_PAGE_SIZE;
+  const from = state.page * pageSize;
 
   try {
     if (state.mode === 'overall') {
@@ -319,16 +322,16 @@ async function loadPage(append = false) {
         }
       }
     } else {
-      const data = await fetchGamemodeRankings(state.mode, PAGE_SIZE, from);
+      const data = await fetchGamemodeRankings(state.mode, GAMEMODE_PAGE_SIZE, from);
       let totalFetched = 0;
       for (let t = 1; t <= 5; t++) {
         const items = data[String(t)] || [];
         state.tierData[String(t)].push(...items);
         totalFetched += items.length;
       }
-      renderGamemodeColumns(data, state.mode, $viewContainer, append);
+      await renderGamemodeColumns(data, state.mode, $viewContainer, append);
       
-      const allShort = Object.values(data).every(arr => arr.length < PAGE_SIZE);
+      const allShort = Object.values(data).every(arr => arr.length < GAMEMODE_PAGE_SIZE);
       if (allShort || totalFetched === 0) state.hasMore = false;
     }
     state.page++;

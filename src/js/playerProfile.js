@@ -4,7 +4,7 @@
  */
 
 import { getIcon } from './icons.js';
-import { gamemodes, players } from './players.js';
+import { fetchPlayerByName } from './api.js';
 
 // Title requirements mapping
 const titleRequirements = {
@@ -35,6 +35,15 @@ const tier2Svg = `<svg viewBox="0 0 1080 1080" class="rank-place-icon"><path d="
 const tier3Svg = `<svg viewBox="0 0 1080 1080" class="rank-place-icon"><path d="M859.2 273.1v63.7c0 178.7-143.7 421.8-322.1 425.6-1.6.3-2.9.3-4.5.3-180.3 0-326.5-245.6-326.5-425.9v-132c0-90.2 73.3-95.1 163.4-95.1h326.2c90.2 0 163.4 73.3 163.4 163.4Z" fill="#b56328"/><path d="M532.6 376.5v445.9M621.2 376.7v445.7c0 47.5-37.3 86-84.1 88.6h-4.5c-49.1 0-88.6-39.5-88.6-88.6V376.7c0-49.1 39.5-88.9 88.6-88.9s88.6 39.8 88.6 88.9" fill="#b56328"/><path d="M735.5 929.4c0 26.8-21.7 48.7-48.4 48.7h-309c-26.8 0-48.4-22-48.4-48.7s12.1-56.1 31.2-75.5c19.4-19.4 46.2-31.5 75.8-31.5h191.8c59.2 0 107 48.1 107 107" fill="#b56328"/><path d="M818.2 230.5s176.3-42.8 176.3 95.2-77 427-302.6 345.7" style="stroke:#a15c2a;fill:none;stroke-linecap:round;stroke-miterlimit:10;stroke-width:96.4px"/><path d="M255.7 230.5S79.4 187.7 79.4 325.7s77 427 302.6 345.7" style="fill:none;stroke-linecap:round;stroke-miterlimit:10;stroke-width:96.4px;stroke:#b56328"/><path d="M621.2 742.7v79.6h7.3c59.2 0 107 48.1 107 107S713.8 978 687.1 978h-150V109.7h158.6c90.2 0 163.4 5 163.4 95.1v132c0 149.4-100.7 344-238 405.8Z" fill="#a15c2a"/></svg>`;
 
 let currentModalPlayer = null;
+
+function normalizeLookupValue(value) {
+    return typeof value === 'string' ? value.trim().toLowerCase() : '';
+}
+
+async function findFullPlayer(player) {
+    const name = normalizeLookupValue(player.username || player.name);
+    return name ? fetchPlayerByName(name) : null;
+}
 
 /**
  * Initialize the player profile modal
@@ -83,14 +92,11 @@ export async function openPlayerProfile(player) {
         return;
     }
 
-    // If player object is missing required fields, look up full player data
     let fullPlayer = player;
-    if (!player.username && player.name) {
-        // This is a simplified player object from gamemode view
-        // Look up full player data
-        fullPlayer = players.find(p => p.uuid === player.uuid || p.username === player.name);
+    if (fullPlayer.partialProfile || !fullPlayer.username || !fullPlayer.tiers) {
+        fullPlayer = await findFullPlayer(player);
         if (!fullPlayer) {
-            console.error('Player not found in players array:', player);
+            console.error('Player not found in live player cache:', player);
             return;
         }
         console.log('Found full player data:', fullPlayer);
@@ -175,6 +181,9 @@ function getTitleIcon(title) {
  * Build the HTML for the player profile modal
  */
 async function buildPlayerProfileHTML(player) {
+    const username = player.username || player.name || 'Unknown';
+    const uuid = typeof player.uuid === 'string' ? player.uuid : '';
+    const avatarKey = uuid ? uuid.replace(/-/g, '') : username;
     const title = getPlayerTitle(player.points);
     const titleColor = titleColors[title] || '#9ca3af';
     const position = getPlayerOverallPosition(player);
@@ -191,16 +200,16 @@ async function buildPlayerProfileHTML(player) {
             
             <div class="player-profile-header">
                 <div class="player-profile-skin ${position === 1 ? 'rank-1-glow' : position === 2 ? 'rank-2-glow' : position === 3 ? 'rank-3-glow' : ''}">
-                    <img src="https://visage.surgeplay.com/bust/128/${player.uuid.replace(/-/g, '')}.png" 
-                         alt="${player.username}" 
-                         onerror="this.src='https://visage.surgeplay.com/bust/128/${player.username}.png'">
+                    <img src="https://visage.surgeplay.com/bust/128/${avatarKey}.png" 
+                         alt="${username}" 
+                         onerror="this.src='https://visage.surgeplay.com/bust/128/${username}.png'">
                 </div>
                 
                 <h2 class="player-profile-name">
                     ${position === 1 ? tier1Svg : ''}
                     ${position === 2 ? tier2Svg : ''}
                     ${position === 3 ? tier3Svg : ''}
-                    ${player.username}
+                    ${username}
                 </h2>
                 
                 <div class="player-profile-title" style="background: ${titleColor}25; border: 1px solid ${titleColor}60; color: ${titleColor};">
@@ -214,7 +223,7 @@ async function buildPlayerProfileHTML(player) {
                 
                 <div class="player-profile-region">${player.region || 'Unknown Region'}</div>
                 
-                <a href="https://namemc.com/profile/${player.username}" target="_blank" class="namemc-link">
+                <a href="https://namemc.com/profile/${username}" target="_blank" class="namemc-link">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
                         <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>

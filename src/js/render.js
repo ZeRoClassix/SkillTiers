@@ -89,9 +89,36 @@ const TITLES = [
   { name: 'Rookie', threshold: 0, icon: '../info icon/rookie.svg', color: '#9ca3af' }
 ];
 
+const OVERALL_RENDER_BATCH_SIZE = 20;
+const GAMEMODE_RENDER_BATCH_SIZE = 25;
+
 // Emulate point-based titles roughly based on official site
 function rankNameCalc(points) {
   return TITLES.find(t => points >= t.threshold) || TITLES[TITLES.length - 1];
+}
+
+function nextFrame() {
+  return new Promise((resolve) => {
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(() => resolve());
+      return;
+    }
+
+    setTimeout(resolve, 0);
+  });
+}
+
+async function appendRowsInBatches(container, items, batchSize, renderRow) {
+  for (let index = 0; index < items.length; index += batchSize) {
+    const batch = items.slice(index, index + batchSize);
+    const rows = await Promise.all(batch.map((item, batchIndex) => renderRow(item, index + batchIndex)));
+
+    container.insertAdjacentHTML('beforeend', rows.join(''));
+
+    if (index + batchSize < items.length) {
+      await nextFrame();
+    }
+  }
 }
 
 /* ----------------------------------------------------------
@@ -124,25 +151,17 @@ function buildTierTooltip(slug, r) {
   `;
 }
 
-/* ----------------------------------------------------------
-   Overall Mode Row Builder - MCTiers Style
-   ---------------------------------------------------------- */
-async function buildOverallRow(player, rank) {
-  const { uuid, name, region, points, rankings } = player;
-
-  // Use 3D bust avatar like MCTiers
-  const avatar = avatarUrl(uuid, 80, name);
-
-  // Gamemode Tiers - display on right side like MCTiers
-  // Filter out 'overall' tier since rank is already displayed
-  const gamemodes = Object.entries(rankings || {})
+async function buildPlayerTierBadges(rankings, preferredSlug = null) {
+  const gamemodeEntries = Object.entries(rankings || {})
     .filter(([slug, r]) => r && slug !== 'overall')
-    .sort(([_, a], [__, b]) => tierSortValue(a.tier, a.pos) - tierSortValue(b.tier, b.pos));
+    .sort(([leftSlug, left], [rightSlug, right]) => {
+      if (leftSlug === preferredSlug) return -1;
+      if (rightSlug === preferredSlug) return 1;
+      return tierSortValue(left.tier) - tierSortValue(right.tier);
+    });
 
-  // Build tier badges - larger size like MCTiers
-  const tiersHtml = await Promise.all(gamemodes.map(async ([slug, r]) => {
+  return Promise.all(gamemodeEntries.map(async ([slug, r]) => {
     const iconHtml = await getIcon(slug);
-    
     let stateClass = '';
     if (r.state === 'retired') stateClass = 'retired-tier';
     if (r.state === 'peak') stateClass = 'peak-tier';
@@ -158,20 +177,33 @@ async function buildOverallRow(player, rank) {
       </div>
     `;
   }));
+}
+
+/* ----------------------------------------------------------
+   Overall Mode Row Builder - MCTiers Style
+   ---------------------------------------------------------- */
+async function buildOverallRow(player, rank) {
+  const { uuid, name, region, points, rankings } = player;
+  const displayRank = Number.isFinite(player.rank) ? player.rank : rank;
+
+  // Use 3D bust avatar like MCTiers
+  const avatar = avatarUrl(uuid, 80, name);
+
+  const tiersHtml = await buildPlayerTierBadges(rankings);
 
   const titleData = rankNameCalc(points || 0);
-  const rowClass = rank <= 3 ? `top-rank-${rank}` : '';
-  const top3Bg = rank <= 3 ? TOP_PLACE_BACKGROUNDS[rank] : '';
-  const otherBg = rank > 3 ? OTHER_PLACE_BACKGROUND : '';
+  const rowClass = displayRank <= 3 ? `top-rank-${displayRank}` : '';
+  const top3Bg = displayRank <= 3 ? TOP_PLACE_BACKGROUNDS[displayRank] : '';
+  const otherBg = displayRank > 3 ? OTHER_PLACE_BACKGROUND : '';
 
   return `
     <div class="mctiers-player-row ${rowClass}" data-name="${name.toLowerCase()}" data-player='${JSON.stringify(player).replace(/'/g, "&#39;")}' style="cursor: pointer;">
-      <div class="player-rank">${rank}</div>
+      <div class="player-rank">${displayRank}</div>
       
       <div class="player-skin-wrapper">
         ${top3Bg ? `<span class="top3-bg" aria-hidden="true">${top3Bg}</span>` : ''}
         ${otherBg ? `<span class="other-bg" aria-hidden="true">${otherBg}</span>` : ''}
-        <div class="rank-in-shimmer">${rank}</div>
+        <div class="rank-in-shimmer">${displayRank}</div>
         <div class="player-skin">
           <img src="${avatar}" alt="${name}" loading="lazy" onerror="this.src='https://minotar.net/bust/MHF_Steve/80.png';this.onerror=null;" />
         </div>
@@ -209,23 +241,14 @@ async function createGamemodeRow(p, tier, slug, isFirstPlace = false) {
   const highlightCls = isFirstPlace ? 'rank-1-highlight' : '';
   const tierClass = getTierClass(tier);
   const tierLabel = getTierLabel(tier);
-  
-  // Extract tier number from string for points calculation
-  const tierNum = parseInt(tier.slice(-1), 10) || 5;
-  const isHT = tier.toUpperCase().startsWith('HT');
-  const pts = ((6 - tierNum) * 100) + (isHT ? 50 : 0); // Visual placeholder
-
   const iconHtml = await getIcon(slug); // Use local tab icons - now async
-
-  // Build tooltip for gamemode row
   const tooltipHtml = buildTierTooltip(slug, p).replace(/"/g, '&quot;');
 
   return `
-    <div class="gm-player-row ${highlightCls}" data-tooltip="${tooltipHtml}" data-player='${JSON.stringify(p).replace(/'/g, "&#39;")}' style="cursor: pointer;">
+    <div class="gm-player-row ${highlightCls}" data-tooltip="${tooltipHtml}" data-name="${p.name.toLowerCase()}" data-player='${JSON.stringify(p).replace(/'/g, "&#39;")}' style="cursor: pointer;">
       <img class="gm-row-avatar" src="${avatar}" loading="lazy" onerror="this.src='https://visage.surgeplay.com/bust/64/MHF_Steve.png';this.onerror=null;" />
       <div class="gm-row-info">
         <span class="gm-row-name">${p.name}</span>
-        <span class="gm-row-points">${pts} pts</span>
       </div>
       <div class="gm-row-region">
         <span class="region-badge ${regionClass(p.region)}">${p.region || '??'}</span>
@@ -237,36 +260,33 @@ async function createGamemodeRow(p, tier, slug, isFirstPlace = false) {
   `;
 }
 
-async function buildGamemodeColumnsHTML(tierData, slug) {
-  let html = `<div class="gamemode-grid-container">`;
+function buildGamemodeColumnsShell() {
+  let html = '<div class="gamemode-grid-container">';
 
-  // 5 tier columns (1-5), each containing LT and HT players
   for (let tier = 1; tier <= 5; tier++) {
-    const players = tierData[String(tier)] || [];
-    const headerClass = `header-t${tier}`;
-
     html += `
       <div class="tier-col" id="tier-col-${tier}">
         <div class="tier-col-header header-t${tier}">
           ${tier === 1 ? T1_ICON : (tier === 2 ? T2_ICON : (tier === 3 ? T3_ICON : ''))} Tier ${tier}
         </div>
-        <div class="tier-list">
-    `;
-
-    // Build rows asynchronously
-    const playerRows = await Promise.all(
-      players.map((p, index) => createGamemodeRow(p, p.tier, slug, (tier === 1 && index === 0 && p.isHT)))
-    );
-    html += playerRows.join('');
-
-    html += `
-        </div>
+        <div class="tier-list"></div>
       </div>
     `;
   }
-  
-  html += `</div>`;
+
+  html += '</div>';
   return html;
+}
+
+async function appendGamemodeTierRows(parentList, players, slug, { highlightFirstPlace = false } = {}) {
+  await appendRowsInBatches(parentList, players, GAMEMODE_RENDER_BATCH_SIZE, (player, absoluteIndex) => {
+    return createGamemodeRow(
+      player,
+      player.tier,
+      slug,
+      highlightFirstPlace && absoluteIndex === 0 && player.isHT,
+    );
+  });
 }
 
 /* ----------------------------------------------------------
@@ -455,16 +475,7 @@ export async function renderHome(container) {
 }
 
 export async function renderOverallCards(players, container, append = false, startRank = 1) {
-  // Build all player rows asynchronously
-  const playerRows = await Promise.all(
-    players.map((p, i) => buildOverallRow(p, startRank + i))
-  );
-  
-  const html = playerRows.join('');
-  
-  if (append) {
-    container.insertAdjacentHTML('beforeend', html);
-  } else {
+  if (!append) {
     // Add column headers for Overall tab
     const headersHtml = `
       <div class="overall-headers">
@@ -474,10 +485,16 @@ export async function renderOverallCards(players, container, append = false, sta
         <div class="header-tiers">TIERS</div>
       </div>
     `;
-    container.innerHTML = headersHtml + html;
+    container.innerHTML = headersHtml;
   }
 
-  // Initialize tooltips after rendering
+  await appendRowsInBatches(
+    container,
+    players,
+    OVERALL_RENDER_BATCH_SIZE,
+    (player, index) => buildOverallRow(player, startRank + index),
+  );
+
   initTooltips(container);
 }
 
@@ -488,20 +505,24 @@ export async function renderGamemodeColumns(tierData, slug, container, append = 
       const parentList = container.querySelector(`#tier-col-${tier} .tier-list`);
       if (parentList) {
         const players = tierData[String(tier)] || [];
-        // Build rows asynchronously
-        const playerRows = await Promise.all(
-          players.map(p => createGamemodeRow(p, p.tier, slug))
-        );
-        parentList.insertAdjacentHTML('beforeend', playerRows.join(''));
+        await appendGamemodeTierRows(parentList, players, slug);
       }
     }
-    // Initialize tooltips for newly added rows
-    initTooltips(container);
   } else {
-    container.innerHTML = await buildGamemodeColumnsHTML(tierData, slug);
-    // Initialize tooltips after rendering
-    initTooltips(container);
+    container.innerHTML = buildGamemodeColumnsShell();
+
+    for (let tier = 1; tier <= 5; tier++) {
+      const parentList = container.querySelector(`#tier-col-${tier} .tier-list`);
+      if (!parentList) continue;
+
+      const players = tierData[String(tier)] || [];
+      await appendGamemodeTierRows(parentList, players, slug, {
+        highlightFirstPlace: tier === 1,
+      });
+    }
   }
+
+  initTooltips(container);
 }
 
 export function clearGrid(container) {
@@ -514,44 +535,9 @@ export function clearGrid(container) {
  */
 export function initNewRow(rowEl) {
   if (!rowEl) return;
-  // Tooltips on tier badges within the row
-  const tooltipTriggers = rowEl.querySelectorAll('[data-tooltip]');
-  const tooltipContainer = document.getElementById('tier-tooltip-container');
-  if (tooltipContainer) {
-    tooltipTriggers.forEach(trigger => {
-      trigger.addEventListener('mouseenter', (e) => {
-        const html = trigger.getAttribute('data-tooltip');
-        if (!html) return;
-        tooltipContainer.innerHTML = html;
-        tooltipContainer.style.opacity = '1';
-        tooltipContainer.style.transform = 'scale(1)';
-        const rect = trigger.getBoundingClientRect();
-        const tRect = tooltipContainer.getBoundingClientRect();
-        let top = rect.top - tRect.height - 10;
-        let left = rect.left + rect.width / 2 - tRect.width / 2;
-        if (top < 10) top = rect.bottom + 10;
-        if (left < 10) left = 10;
-        else if (left + tRect.width > window.innerWidth - 10) left = window.innerWidth - tRect.width - 10;
-        tooltipContainer.style.top = `${top}px`;
-        tooltipContainer.style.left = `${left}px`;
-      });
-      trigger.addEventListener('mouseleave', () => {
-        tooltipContainer.style.opacity = '0';
-        tooltipContainer.style.transform = 'scale(0.95)';
-      });
-    });
-  }
-  // Profile modal click handler
-  if (rowEl.dataset.player) {
-    rowEl.addEventListener('click', (e) => {
-      if (e.target.closest('a') || e.target.closest('button')) return;
-      try {
-        const player = JSON.parse(rowEl.getAttribute('data-player'));
-        import('./playerProfile.js').then(m => m.openPlayerProfile(player));
-      } catch (err) {
-        console.error('Failed to parse player data:', err);
-      }
-    });
+  const container = rowEl.closest('#view-container') || rowEl.parentElement;
+  if (container) {
+    initTooltips(container);
   }
 }
 
@@ -568,56 +554,104 @@ export function renderSkeletons(container) {
    Tooltip Initialization
    ---------------------------------------------------------- */
 export function initTooltips(container) {
-  // Remove any existing tooltip container
-  const existingTooltip = document.getElementById('tier-tooltip-container');
-  if (existingTooltip) {
-    existingTooltip.remove();
+  if (!container || container.dataset.tooltipBound === 'true') {
+    ensureTooltipContainer();
+    return;
   }
 
-  // Create global tooltip container
-  const tooltipContainer = document.createElement('div');
-  tooltipContainer.id = 'tier-tooltip-container';
-  tooltipContainer.className = 'tier-tooltip-container';
-  tooltipContainer.style.cssText = `
-    position: fixed;
-    pointer-events: none;
-    z-index: 10000;
-    opacity: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    transform: scale(0.95);
-  `;
-  document.body.appendChild(tooltipContainer);
+  container.dataset.tooltipBound = 'true';
+  ensureTooltipContainer();
 
-  // Add event listeners to all tier icon groups with tooltips
-  const tooltipTriggers = container.querySelectorAll('[data-tooltip]');
+  container.addEventListener('pointerover', (event) => {
+    const trigger = event.target.closest('[data-tooltip]');
+    if (!trigger || !container.contains(trigger)) return;
 
-  tooltipTriggers.forEach(trigger => {
-    trigger.addEventListener('mouseenter', (e) => {
-      const tooltipHtml = trigger.getAttribute('data-tooltip');
-      if (!tooltipHtml) return;
+    const previousTrigger = event.relatedTarget instanceof Element
+      ? event.relatedTarget.closest('[data-tooltip]')
+      : null;
+    if (previousTrigger === trigger) return;
 
-      tooltipContainer.innerHTML = tooltipHtml;
-      tooltipContainer.style.opacity = '1';
-      tooltipContainer.style.transform = 'scale(1)';
+    const tooltipHtml = trigger.getAttribute('data-tooltip');
+    if (!tooltipHtml) return;
 
-      positionTooltip(e, tooltipContainer, trigger);
-    });
-
-    trigger.addEventListener('mouseleave', () => {
-      tooltipContainer.style.opacity = '0';
-      tooltipContainer.style.transform = 'scale(0.95)';
-    });
-
-    trigger.addEventListener('mousemove', (e) => {
-      positionTooltip(e, tooltipContainer, trigger);
-    });
+    const tooltipContainer = ensureTooltipContainer();
+    tooltipContainer.innerHTML = tooltipHtml;
+    tooltipContainer.style.opacity = '1';
+    tooltipContainer.style.transform = 'scale(1)';
+    positionTooltip(tooltipContainer, trigger);
   });
 
-  // Add click listeners to player rows for profile modal
-  initPlayerRowClicks(container);
+  container.addEventListener('pointermove', (event) => {
+    const trigger = event.target.closest('[data-tooltip]');
+    if (!trigger || !container.contains(trigger)) return;
+
+    const tooltipContainer = ensureTooltipContainer();
+    if (tooltipContainer.style.opacity !== '1') return;
+
+    positionTooltip(tooltipContainer, trigger);
+  });
+
+  container.addEventListener('pointerout', (event) => {
+    const trigger = event.target.closest('[data-tooltip]');
+    if (!trigger || !container.contains(trigger)) return;
+
+    const nextTrigger = event.relatedTarget instanceof Element
+      ? event.relatedTarget.closest('[data-tooltip]')
+      : null;
+    if (nextTrigger === trigger) return;
+
+    hideTooltip();
+  });
+
+  container.addEventListener('click', (event) => {
+    const row = event.target.closest('[data-player]');
+    if (!row || !container.contains(row)) return;
+    if (event.target.closest('a') || event.target.closest('button')) return;
+
+    const playerData = row.getAttribute('data-player');
+    if (!playerData) return;
+
+    try {
+      const player = JSON.parse(playerData);
+      import('./playerProfile.js').then((module) => {
+        module.openPlayerProfile(player);
+      });
+    } catch (error) {
+      console.error('Failed to parse player data:', error);
+    }
+  });
 }
 
-function positionTooltip(e, tooltipContainer, trigger) {
+function ensureTooltipContainer() {
+  let tooltipContainer = document.getElementById('tier-tooltip-container');
+
+  if (!tooltipContainer) {
+    tooltipContainer = document.createElement('div');
+    tooltipContainer.id = 'tier-tooltip-container';
+    tooltipContainer.className = 'tier-tooltip-container';
+    tooltipContainer.style.cssText = `
+      position: fixed;
+      pointer-events: none;
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      transform: scale(0.95);
+    `;
+    document.body.appendChild(tooltipContainer);
+  }
+
+  return tooltipContainer;
+}
+
+function hideTooltip() {
+  const tooltipContainer = document.getElementById('tier-tooltip-container');
+  if (!tooltipContainer) return;
+
+  tooltipContainer.style.opacity = '0';
+  tooltipContainer.style.transform = 'scale(0.95)';
+}
+
+function positionTooltip(tooltipContainer, trigger) {
   const rect = trigger.getBoundingClientRect();
   const tooltipRect = tooltipContainer.getBoundingClientRect();
 
@@ -639,38 +673,4 @@ function positionTooltip(e, tooltipContainer, trigger) {
 
   tooltipContainer.style.top = `${top}px`;
   tooltipContainer.style.left = `${left}px`;
-}
-
-/**
- * Initialize click handlers for player rows to open profile modal
- */
-function initPlayerRowClicks(container) {
-  const playerRows = container.querySelectorAll('[data-player]');
-  
-  console.log('Found player rows:', playerRows.length);
-  
-  playerRows.forEach(row => {
-    row.addEventListener('click', (e) => {
-      console.log('Player row clicked!', e.target);
-      
-      // Don't trigger if clicking on a link or button inside the row
-      if (e.target.closest('a') || e.target.closest('button')) return;
-      
-      const playerData = row.getAttribute('data-player');
-      console.log('Player data:', playerData);
-      
-      if (playerData) {
-        try {
-          const player = JSON.parse(playerData);
-          console.log('Parsed player:', player);
-          // Import and open player profile modal
-          import('./playerProfile.js').then(module => {
-            module.openPlayerProfile(player);
-          });
-        } catch (err) {
-          console.error('Failed to parse player data:', err);
-        }
-      }
-    });
-  });
 }
