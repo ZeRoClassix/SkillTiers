@@ -36,13 +36,13 @@ export const players = [
     {
         username: 'aidn',
         uuid: '4de783e9-ea4c-4651-87f3-dddc641d9607',
-        rank: 40,
-        points: 112,
+        rank: 81,
+        points: 82,
         region: 'EU',
         tiers: {
             overall: { current: null, peak: null, retired: false },
             ltm: { current: null, peak: null, retired: false },
-            vanilla: { current: "HT1", peak: null, retired: false },
+            vanilla: { current: "HT2", peak: null, retired: false },
             uhc: { current: "HT3", peak: null, retired: false },
             pot: { current: "LT3", peak: null, retired: false },
             nethop: { current: "LT2", peak: null, retired: false },
