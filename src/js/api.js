@@ -596,39 +596,36 @@ export async function fetchPlayerOverallRank(name) {
 
 export function avatarUrl(uuid, size = 64, username = '') {
   if (uuid && uuid !== EMPTY_UUID && uuid.length > 10) {
-    const cleanUuid = uuid.replace(/-/g, '');
-    return `https://visage.surgeplay.com/bust/${size}/${cleanUuid}.png`;
+    return `https://render.crafty.gg/3d/bust/${uuid}`;
   }
 
   if (username) {
-    return `https://visage.surgeplay.com/bust/${size}/${username}.png`;
+    return `https://render.crafty.gg/3d/bust/${username}`;
   }
 
-  return `https://visage.surgeplay.com/bust/${size}/MHF_Steve.png`;
+  return `https://render.crafty.gg/3d/bust/MHF_Steve`;
 }
 
 export function headUrl(uuid, size = 64, username = '') {
   if (uuid && uuid !== EMPTY_UUID && uuid.length > 10) {
-    const cleanUuid = uuid.replace(/-/g, '');
-    return `https://visage.surgeplay.com/face/${size}/${cleanUuid}.png`;
+    return `https://minotar.net/avatar/${uuid.replace(/-/g, '')}/${size}.png`;
   }
 
   if (username) {
-    return `https://visage.surgeplay.com/face/${size}/${username}.png`;
+    return `https://minotar.net/avatar/${username}/${size}.png`;
   }
 
-  return `https://visage.surgeplay.com/face/${size}/MHF_Steve.png`;
+  return `https://minotar.net/avatar/MHF_Steve/${size}.png`;
 }
 
 export function skinUrl(uuid, username = '') {
   if (uuid && uuid !== EMPTY_UUID && uuid.length > 10) {
-    const cleanUuid = uuid.replace(/-/g, '');
-    return `https://visage.surgeplay.com/full/256/${cleanUuid}.png`;
+    return `https://minotar.net/skin/${uuid.replace(/-/g, '')}.png`;
   }
 
   if (username) {
-    return `https://visage.surgeplay.com/full/256/${username}.png`;
+    return `https://minotar.net/skin/${username}.png`;
   }
 
-  return 'https://visage.surgeplay.com/full/256/MHF_Steve.png';
+  return 'https://minotar.net/skin/MHF_Steve.png';
 }

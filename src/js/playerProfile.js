@@ -200,9 +200,9 @@ async function buildPlayerProfileHTML(player) {
             
             <div class="player-profile-header">
                 <div class="player-profile-skin ${position === 1 ? 'rank-1-glow' : position === 2 ? 'rank-2-glow' : position === 3 ? 'rank-3-glow' : ''}">
-                    <img src="https://visage.surgeplay.com/bust/128/${avatarKey}.png" 
+                    <img src="https://render.crafty.gg/3d/bust/${avatarKey}" 
                          alt="${username}" 
-                         onerror="this.src='https://visage.surgeplay.com/bust/128/${username}.png'">
+                         onerror="this.src='https://render.crafty.gg/3d/bust/${username}';this.onerror=null;">
                 </div>
                 
                 <h2 class="player-profile-name">

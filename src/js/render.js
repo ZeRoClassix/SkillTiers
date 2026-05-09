@@ -205,7 +205,7 @@ async function buildOverallRow(player, rank) {
         ${otherBg ? `<span class="other-bg" aria-hidden="true">${otherBg}</span>` : ''}
         <div class="rank-in-shimmer">${displayRank}</div>
         <div class="player-skin">
-          <img src="${avatar}" alt="${name}" loading="lazy" onerror="this.src='https://minotar.net/bust/MHF_Steve/80.png';this.onerror=null;" />
+          <img src="${avatar}" alt="${name}" loading="eager" referrerpolicy="no-referrer" onerror="this.src='https://render.crafty.gg/3d/bust/${name || 'MHF_Steve'}';this.onerror=null;" />
         </div>
       </div>
       
@@ -246,7 +246,7 @@ async function createGamemodeRow(p, tier, slug, isFirstPlace = false) {
 
   return `
     <div class="gm-player-row ${highlightCls}" data-tooltip="${tooltipHtml}" data-name="${p.name.toLowerCase()}" data-player='${JSON.stringify(p).replace(/'/g, "&#39;")}' style="cursor: pointer;">
-      <img class="gm-row-avatar" src="${avatar}" loading="lazy" onerror="this.src='https://visage.surgeplay.com/bust/64/MHF_Steve.png';this.onerror=null;" />
+      <img class="gm-row-avatar" src="${avatar}" loading="eager" referrerpolicy="no-referrer" onerror="this.src='https://render.crafty.gg/3d/bust/${p.name || 'MHF_Steve'}';this.onerror=null;" />
       <div class="gm-row-info">
         <span class="gm-row-name">${p.name}</span>
       </div>
