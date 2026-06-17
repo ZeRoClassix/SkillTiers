@@ -35,7 +35,7 @@ export const players = [
     */
     {
         username: 'aidn',
-        uuid: '4de783e9-ea4c-4651-87f3-dddc641d9607',
+        uuid: '34138ee7-b9c5-4f3b-ae10-9e84ff85856d',
         rank: 81,
         points: 82,
         region: 'EU',
