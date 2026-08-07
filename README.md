@@ -2,7 +2,7 @@
  
 ## 👤 Project Ownership
  
-**This project is completely owned, designed, and developed by Classix (you).**
+**This project is completely owned, designed, and developed by Classix.**
  
 All HTML, CSS, and JavaScript code in this repository was personally written by Classix. This includes:
 - All frontend structure (`src/index.html`)
